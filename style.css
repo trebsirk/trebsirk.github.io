@@ -1,0 +1,18 @@
+.node {
+    cursor: pointer;
+}
+
+.link {
+    fill: none;
+    stroke: #999;
+    stroke-opacity: 0.6;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    font-size: 12;
+  }
+
+.limited-width {
+    max-width: 600px; /* Limit width to 400 pixels */
+}
