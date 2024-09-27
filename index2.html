@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 Selection Test</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        svg {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<svg id="testSvg"></svg>
+
+<script>
+    const svg = d3.select("#testSvg")
+        .attr("viewBox", "0 0 500 300");
+
+    // Append a circle
+    svg.append("circle")
+        .attr("cx", 250)
+        .attr("cy", 150)
+        .attr("r", 50)
+        .attr("fill", "steelblue")
+        .on("click touchstart", function(event) {
+            d3.select(this).attr("fill", "orange"); // Change color on click/touch
+        });
+
+    // Attempt to select the circle and change its color
+    svg.select("circle").attr("fill", "green"); // This should work
+</script>
+
+</body>
+</html>
