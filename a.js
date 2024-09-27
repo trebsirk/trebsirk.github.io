@@ -163,6 +163,7 @@ d3.json("graph_data.json").then(data => {
         .attr("cx", d => d.x) // Set x position
         .attr("cy", d => d.y) // Set y position
         .on("click touchstart", (event, d) => {
+            event.preventDefault();
             if (selectedNodes.length < 4 
                 ||
                 d.selected && selectedNodes.length == 4

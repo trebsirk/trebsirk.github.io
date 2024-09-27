@@ -1,3 +1,14 @@
+/* Apply to screens less than 600px wide */
+@media (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+
+    input, button {
+        width: 100%; /* Make buttons and inputs full width */
+    }
+}
+
 .node {
     cursor: pointer;
 }
@@ -10,20 +21,10 @@
 
 body {
     font-family: 'Courier New', monospace;
-    font-size: 12;
+    font-size: 12px;
   }
 
 .limited-width {
     max-width: 600px; /* Limit width to 400 pixels */
 }
 
-/* Apply to screens less than 600px wide */
-@media (max-width: 600px) {
-    body {
-        font-size: 14px;
-    }
-
-    input, button {
-        width: 100%; /* Make buttons and inputs full width */
-    }
-}
