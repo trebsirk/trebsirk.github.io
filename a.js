@@ -162,7 +162,7 @@ d3.json("graph_data.json").then(data => {
         .attr("fill", "lightblue")
         .attr("cx", d => d.x) // Set x position
         .attr("cy", d => d.y) // Set y position
-        .on("touchdown", (event, d) => {
+        .on("click touchdown", (event, d) => {
             event.preventDefault();
             if (selectedNodes.length < 4 
                 ||
@@ -186,7 +186,7 @@ d3.json("graph_data.json").then(data => {
                     .attr("fill", d.selected ? "orange" : "lightblue"); // Change color
 
                 updateNodeColors(); // Update node colors when a node is selected/deselected
-                updateEdgeColors(); // Update edge colors when a node is selected/deselected
+                //updateEdgeColors(); // Update edge colors when a node is selected/deselected
             }
             
         });
