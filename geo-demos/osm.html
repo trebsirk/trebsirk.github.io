@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSM dev</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <h1>OSM dev</h1>
+    <!--
+    <svg viewBox="0 0 width height" preserveAspectRatio="xMidYMid meet" width="800" height="600"></svg>
+    -->
+    
+    <!-- <form id="zipcodeForm">
+        <label for="zipcode">Enter a zipcode:</label>
+        <input type="text" id="zipcode" placeholder="some zipcode">
+        <button onclick="getBoundingBoxForZIPCode()">Submit</button>
+    </form> -->
+
+    <form onsubmit="getZipCodeData(event)">
+        <label for="zipCodeInput">ZIP Code:</label>
+        <input type="text" id="zipCodeInput" name="zipCode" required>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="spinner" class="spinner"></div> 
+
+    <div id="bounding-box-div">bounding box: <span id="bounding-box-span"></span></div>
+    <button onclick="getClientGeo()">Use my GEO location</button>
+    <script src="osm.js"></script>
+    
+</body>
+</html>
