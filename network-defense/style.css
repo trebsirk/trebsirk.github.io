@@ -1,0 +1,54 @@
+/* Apply to screens less than 600px wide */
+@media (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+
+    input, button {
+        width: 30%; /* Make buttons and inputs full width */
+    }
+}
+
+.node {
+    cursor: pointer;
+}
+
+.link {
+    fill: none;
+    stroke: #999;
+    stroke-opacity: 0.6;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+  }
+
+.limited-width {
+    max-width: 600px; /* Limit width to 400 pixels */
+}
+
+#loading {
+    width: 2rem;
+    height: 2rem;
+    border: 5px solid #f3f3f3;
+    border-top: 6px solid hwb(99 25% 5%);
+    border-radius: 100%;
+    margin: auto;
+    visibility: hidden;
+    animation: spin 1s infinite linear;
+    display: none;
+}
+
+#loading.display {
+    visibility: visible;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
