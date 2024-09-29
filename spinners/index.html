@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spinner Demo</title>
+    <style>
+        /* Spinner styles */
+        .spinner {
+            display: none; /* Initially hidden */
+            border: 4px solid rgba(0, 0, 0, 0.1); /* Light gray */
+            border-radius: 50%;
+            border-top: 4px solid #3498db; /* Blue */
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+
+    <script>
+        function getZipCodeData(event) {
+            // Prevent the form from submitting and reloading the page
+            event.preventDefault();
+
+            // Get the spinner element and show it
+            const spinner = document.getElementById("spinner");
+            spinner.style.display = "inline-block"; // Show the spinner
+
+            // Get the value of the zip code input
+            const zipCode = document.getElementById("zipCodeInput").value;
+            console.log("ZIP Code entered:", zipCode);
+
+            // Simulate a delay for demonstration purposes (e.g., replace with actual API call)
+            setTimeout(function () {
+                // Hide the spinner after the process is complete
+                spinner.style.display = "none";
+                alert("ZIP Code processed: " + zipCode);
+            }, 1000); // Simulate a 2-second delay
+        }
+    </script>
+</head>
+<body>
+    <h1>Spinner Demo</h1>
+    
+    <form onsubmit="getZipCodeData(event)">
+        <label for="zipCodeInput">ZIP Code:</label>
+        <input type="text" id="zipCodeInput" name="zipCode" required>
+        <button type="submit">Submit</button>
+        <!-- Spinner Element -->
+        <div id="spinner" class="spinner"></div>
+    </form>
+</body>
+</html>
