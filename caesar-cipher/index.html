@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <title>Caesar Cipher</title>
+    </head>
+    <body>
+        <h1>Caesar Cipher</h1>
+        <h2>Encrypt message</h2>
+        <form>
+            <label>Plaintext:</label>
+            <textarea name='plaintext'>Top Secret</textarea>
+            <label>Shift:</label>
+            <input type='number' name='shift' value='5' min='1' max='26'>
+            <input type="button" value="encrypt" onclick="tryEncrypt()">
+        </form>
+
+        <h3>Output</h3>
+        <div id='encrypt-output'></div>
+
+    <span><br></span>
+        <h2>Decrypt message</h2>
+        <textarea id="cipherText" rows="4" cols="50">
+            Encrypted message goes here...
+        </textarea>
+        <button onclick="tryDecrypt()">Decrypt</button>
+        <h3>Output</h3>
+        <div id="decrypt-output"></div>
+
+        <script src='main.js'></script>
+    </body>
+</html>

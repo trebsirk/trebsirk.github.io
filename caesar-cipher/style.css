@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css?family=Special+Elite&display=swap');
+
+body {
+  font-family: sans-serif;
+}
+h1,h2 { color: olive;}
+label{display:block;}
+
+#output {
+  font-family: 'Special Elite', cursive;
+  font-size: 32px;
+  color: maroon;
+}
