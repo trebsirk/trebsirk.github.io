@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist with JSON Data, Disabled Checkboxes, and Action Log</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .checkbox-col {
+            width: 50px;
+            text-align: center;
+        }
+        .time-col {
+            width: 200px;
+        }
+        tr.complete {
+            background-color: #d4edda;
+        }
+        .li-complete {
+            background-color: #d4edda;
+        }
+        .timestamp {
+            font-size: 12px;
+            color: #555;
+        }
+        .action-log {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cybersecurity Audit Checklist</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th class="checkbox-col">Completed</th>
+                <th>Security Analyst</th>
+                <th class="time-col">Timestamp</th>
+            </tr>
+        </thead>
+        <tbody id="checklist-body">
+            <!-- Rows will be populated by JavaScript -->
+        </tbody>
+    </table>
+
+    <div class="action-log" id="action-log">
+        <h3>Action Log</h3>
+        <ul id="log-list">
+            <!-- Log entries will be added here -->
+        </ul>
+    </div>
+
+    <script>
+
+        // Function to populate the table with the checklist data
+        function populateChecklist() {
+            const tbody = document.getElementById('checklist-body');
+            checklistData.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.dataset.index = index;
+
+                // Task name column
+                const taskCell = document.createElement('td');
+                taskCell.textContent = item.task;
+                row.appendChild(taskCell);
+
+                // Checkbox column (disabled initially)
+                const checkboxCell = document.createElement('td');
+                checkboxCell.classList.add('checkbox-col');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.disabled = true; // Disabled until an analyst is selected
+                checkbox.classList.add('checkbox');
+                checkboxCell.appendChild(checkbox);
+                row.appendChild(checkboxCell);
+
+                // Security analyst dropdown column
+                const dropdownCell = document.createElement('td');
+                const dropdown = document.createElement('select');
+                dropdown.classList.add('dropdown');
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Select Analyst';
+                dropdown.appendChild(defaultOption);
+                ['Analyst A', 'Analyst B', 'Analyst C'].forEach(analyst => {
+                    const option = document.createElement('option');
+                    option.value = analyst;
+                    option.textContent = analyst;
+                    dropdown.appendChild(option);
+                });
+                dropdownCell.appendChild(dropdown);
+                row.appendChild(dropdownCell);
+
+                // Timestamp column
+                const timestampCell = document.createElement('td');
+                timestampCell.classList.add('time-col');
+                const timestamp = document.createElement('span');
+                timestamp.classList.add('timestamp');
+                timestampCell.appendChild(timestamp);
+                row.appendChild(timestampCell);
+
+                tbody.appendChild(row);
+
+                // Event listener to enable checkbox when an analyst is selected
+                dropdown.addEventListener('change', function() {
+                    if (this.value !== '') {
+                        checkbox.disabled = false; // Enable the checkbox
+                    } else {
+                        checkbox.disabled = true; // Disable if no analyst is selected
+                    }
+                });
+
+                // Event listener for the checkbox change
+                checkbox.addEventListener('change', function() {
+                    updateRowColor(row); // Update row background color
+                    updateTimestamp(row); // Update timestamp
+                    logAction(item.task, this.checked); // Log the action
+                });
+            });
+        }
+
+        // Function to update the row background color when checkbox is checked
+        function updateRowColor(rowElement) {
+            const checkbox = rowElement.querySelector('input[type="checkbox"]');
+            if (checkbox.checked) {
+                rowElement.classList.add('li-complete');
+            } else {
+                rowElement.classList.remove('li-complete');
+            }
+        }
+
+        // Function to update the timestamp when the checkbox is selected
+        function updateTimestamp(rowElement) {
+            const timestampElement = rowElement.querySelector('.timestamp');
+            const checkbox = rowElement.querySelector('input[type="checkbox"]');
+            if (checkbox.checked) {
+                const currentTime = new Date().toLocaleString(); // Get the current date and time
+                timestampElement.textContent = `Selected at: ${currentTime}`;
+            } else {
+                timestampElement.textContent = ""; // Clear the timestamp when unchecked
+            }
+        }
+
+        // Function to log actions taken
+        function logAction(task, checked) {
+            const logList = document.getElementById('log-list');
+            const logEntry = document.createElement('li');
+            const currentTime = new Date().toLocaleString();
+            logEntry.textContent = `${task} was ${checked ? 'completed' : 'uncompleted'} at ${currentTime}`;
+            logList.appendChild(logEntry);
+        }
+
+        // Initialize the checklist on page load
+        // Function to fetch and read a local JSON file
+        async function loadLocalJson() {
+            try {
+                const response = await fetch('./data.json'); // Path to your local JSON file
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json(); // Parse JSON data
+                console.log(data); // Log the data to the console or use it as needed
+            } catch (error) {
+                console.error('Error fetching local JSON:', error);
+            }
+        }
+
+        window.onload = () => {
+            const data = await loadLocalJson();
+            populateChecklist(data);
+        }
+    </script>
+</body>
+</html>
