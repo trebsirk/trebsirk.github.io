@@ -19,3 +19,21 @@ The cybersecurity section currently showcases a collection of audit checklists f
             done/not done
             analyst
             assigned
+    refactor / to 
+        cyber audit checklists
+            goals and objectives of an audit
+            use cases
+                web market
+                    audit
+                        Identify the scope
+                        List assets that will be assessed
+                        Note how the audit will help the organization achieve its desired goals
+                        Indicate how often an audit should be performed
+                        Evaluation of organizational policies, protocols, and procedures
+                        Perform risk assessment
+                        Conduct the audit
+                        Create a mitigation plan
+                        Communicate results to stakeholders
+                high profile clients
+                ...
+        misc
