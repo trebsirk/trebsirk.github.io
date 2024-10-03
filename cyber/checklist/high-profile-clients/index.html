@@ -3,111 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cybersecurity Audit Checklist for Personal Security Company</title>
+    <title>Cybersecurity Audit Checklist for High Profile Clients</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            line-height: 1.6;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        h1 {
-            color: #333;
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
+        .checkbox-col {
+            width: 50px; /* Fixed width for the checkbox column */
         }
-        li {
-            margin: 10px 0;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
+        .time-col {
+            width: 150px; /* Fixed width for the timestamp column */
         }
-        checkbox {
-            margin-left: 10px;
+        .log {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            max-height: 150px;
+            overflow-y: auto; /* Scroll if logs exceed the height */
         }
     </style>
 </head>
 <body>
-    <h1>Cybersecurity Audit Checklist for Personal Security Company</h1>
-    <h4>Key Considerations</h4>
-    <p><strong>Privacy: Ensuring that sensitive client information and movements remain confidential.</strong></p>
-    <p>Communication Security: Securing communication channels between the personal security team and the client.</p>
-    <p>Threat Monitoring: Real-time monitoring for digital threats (e.g., hacking, social engineering) and physical threats.</p>
-    <p>Compliance: Following data protection laws (GDPR, CCPA) and ensuring no breaches that could lead to reputational or legal damage.</p>
-    <hr>
-    <ul>
-        <li><strong>1. Client Data Privacy</strong>
-            <ul>
-                <li>Ensure client data (location, personal information, schedules) is encrypted at rest and in transit.<input type="checkbox" class="checkbox"></li>
-                <li>Restrict access to client data on a need-to-know basis (role-based access control).</li>
-                <li>Utilize anonymization and pseudonymization techniques when managing high-profile client data.</li>
-            </ul>
-        </li>
-        <li><strong>2. Secure Communication Channels</strong>
-            <ul>
-                <li>Ensure end-to-end encryption for all communication channels (e.g., mobile devices, emails, radios).</li>
-                <li>Regularly update secure messaging platforms and communication apps.</li>
-                <li>Implement VPNs and encrypted connections for remote communication between clients and the security team.</li>
-            </ul>
-        </li>
-        <li><strong>3. Physical-Digital Security Integration</strong>
-            <ul>
-                <li>Ensure surveillance cameras and other physical security systems are secure and patched.</li>
-                <li>Use encrypted storage for video feeds and ensure that access is strictly controlled.</li>
-                <li>Secure access to client residence or business premises with biometric and multi-factor authentication.</li>
-            </ul>
-        </li>
-        <li><strong>4. Threat Detection and Monitoring</strong>
-            <ul>
-                <li>Deploy threat monitoring systems to track cyber threats targeting high-profile clients (e.g., doxxing, hacking attempts).</li>
-                <li>Implement social media monitoring for potential threats against clients.</li>
-                <li>Set up alerts for abnormal digital activity or physical security breaches.</li>
-            </ul>
-        </li>
-        <li><strong>5. Mobile Device Security</strong>
-            <ul>
-                <li>Ensure mobile devices used by clients and security teams are encrypted.</li>
-                <li>Use Mobile Device Management (MDM) solutions to manage, track, and wipe devices remotely if compromised.</li>
-                <li>Regularly update device software and remove unused apps that may introduce vulnerabilities.</li>
-            </ul>
-        </li>
-        <li><strong>6. Incident Response and Recovery</strong>
-            <ul>
-                <li>Develop an incident response plan specifically for high-profile client data breaches or security compromises.</li>
-                <li>Train the security team on proper incident response procedures for both digital and physical threats.</li>
-                <li>Ensure immediate recovery measures for any compromised digital infrastructure (e.g., data restoration, forensic analysis).</li>
-            </ul>
-        </li>
-        <li><strong>7. Employee Security and Access Control</strong>
-            <ul>
-                <li>Conduct thorough background checks for all employees with access to sensitive client information.</li>
-                <li>Implement strict access controls for physical and digital environments, ensuring no unauthorized access.</li>
-                <li>Provide regular cybersecurity awareness training to employees to recognize social engineering attempts and phishing attacks.</li>
-            </ul>
-        </li>
-        <li><strong>8. Social Engineering and Phishing Defense</strong>
-            <ul>
-                <li>Regularly test staff with simulated phishing attempts to ensure vigilance.</li>
-                <li>Ensure that the security team and clients are trained on avoiding social engineering attacks.</li>
-                <li>Monitor for attempts to impersonate high-profile clients or their security teams.</li>
-            </ul>
-        </li>
-        <li><strong>9. Compliance with Privacy Regulations</strong>
-            <ul>
-                <li>Ensure full compliance with data protection laws such as GDPR, CCPA, or other relevant local regulations.</li>
-                <li>Perform regular audits of data handling processes to avoid regulatory penalties.</li>
-                <li>Maintain comprehensive records of data access logs for legal and compliance purposes.</li>
-            </ul>
-        </li>
-        <li><strong>10. Regular Security Audits</strong>
-            <ul>
-                <li>Conduct regular internal and external security audits to identify potential vulnerabilities.</li>
-                <li>Review access controls and employee permissions quarterly to ensure up-to-date security policies.</li>
-                <li>Update security protocols and infrastructure based on audit findings and emerging threats.</li>
-            </ul>
-        </li>
-    </ul>
+    <h1>Cybersecurity Audit Checklist for High Profile Clients</h1>
+    <table id="checklist-table">
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th class="checkbox-col">Completed</th>
+                <th>Security Analyst</th>
+                <th class="time-col">Timestamp</th>
+            </tr>
+        </thead>
+        <tbody id="checklist-body"></tbody>
+    </table>
+
+    <h2>Log Events</h2>
+    <div class="log" id="log-events"></div>
+
+    <script>
+        
+        async function loadJsonFromURL(url) { 
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json(); // Parse JSON data
+                // console.log(data); // Log the data to the console or use it as needed
+                if (!Array.isArray(data.checklist)) {
+                    console.log("error: json data is not an array")
+                    return [];
+                } 
+                // Displaying the fetched JSON data in the <pre> element
+                //document.getElementById('json-output').textContent = JSON.stringify(data, null, 2);
+                return data.checklist;
+            } catch (error) {
+                console.error('Error fetching JSON from GitHub:', error);
+            }
+        }
+
+        function populateChecklist(checklistData) {
+            const tbody = document.getElementById('checklist-body');
+
+            checklistData.forEach(section => {
+                // Create a row for the section title
+                const sectionRow = document.createElement('tr');
+                const sectionCell = document.createElement('td');
+                sectionCell.colSpan = 4; // Span across all columns
+                sectionCell.textContent = section.sectionTitle;
+                sectionCell.style.fontWeight = 'bold'; // Style section header
+                sectionRow.appendChild(sectionCell);
+                tbody.appendChild(sectionRow);
+
+                // Iterate over the tasks within each section
+                section.tasks.forEach((task, index) => {
+                    const row = document.createElement('tr');
+                    row.dataset.index = index;
+
+                    // Task name column
+                    const taskCell = document.createElement('td');
+                    taskCell.textContent = task;
+                    row.appendChild(taskCell);
+
+                    // Checkbox column (disabled initially)
+                    const checkboxCell = document.createElement('td');
+                    checkboxCell.classList.add('checkbox-col');
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.disabled = true; // Disabled until an analyst is selected
+                    checkbox.classList.add('checkbox');
+                    checkboxCell.appendChild(checkbox);
+                    row.appendChild(checkboxCell);
+
+                    // Security analyst dropdown column
+                    const dropdownCell = document.createElement('td');
+                    const dropdown = document.createElement('select');
+                    dropdown.classList.add('dropdown');
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = '';
+                    defaultOption.textContent = 'Select Analyst';
+                    dropdown.appendChild(defaultOption);
+                    ['Analyst A', 'Analyst B', 'Analyst C'].forEach(analyst => {
+                        const option = document.createElement('option');
+                        option.value = analyst;
+                        option.textContent = analyst;
+                        dropdown.appendChild(option);
+                    });
+                    dropdownCell.appendChild(dropdown);
+                    row.appendChild(dropdownCell);
+
+                    // Timestamp column
+                    const timestampCell = document.createElement('td');
+                    timestampCell.classList.add('time-col');
+                    const timestamp = document.createElement('span');
+                    timestamp.classList.add('timestamp');
+                    timestampCell.appendChild(timestamp);
+                    row.appendChild(timestampCell);
+
+                    tbody.appendChild(row);
+
+                    // Event listener to enable checkbox when an analyst is selected
+                    dropdown.addEventListener('change', function() {
+                        if (this.value !== '') {
+                            checkbox.disabled = false; // Enable the checkbox
+                        } else {
+                            checkbox.disabled = true; // Disable if no analyst is selected
+                        }
+                    });
+
+                    // Event listener for the checkbox change
+                    checkbox.addEventListener('change', function() {
+                        updateRowColor(row); // Update row background color
+                        updateTimestamp(row, timestamp); // Update timestamp
+                        logAction(task, this.checked); // Log the action
+                    });
+                });
+            });
+        }
+
+        function updateRowColor(row) {
+            if (row.querySelector('.checkbox').checked) {
+                row.style.backgroundColor = 'lightgreen'; // Change background to green if checked
+            } else {
+                row.style.backgroundColor = ''; // Reset to default if unchecked
+            }
+        }
+
+        function updateTimestamp(row, timestamp) {
+            const currentTime = new Date().toLocaleString(); // Get current time
+            timestamp.textContent = currentTime; // Update timestamp cell
+        }
+
+        function logAction(task, isChecked) {
+            const logDiv = document.getElementById('log-events');
+            const logMessage = `${new Date().toLocaleString()}: ${task} was ${isChecked ? 'completed' : 'unchecked'}.`;
+            const logEntry = document.createElement('div');
+            logEntry.textContent = logMessage; // Create a log entry
+            logDiv.appendChild(logEntry); // Append to the log div
+        }
+
+        // Execute the function on window load
+        window.onload = async () => {
+            const url = "https://raw.githubusercontent.com/trebsirk/trebsirk.github.io/refs/heads/main/cyber/checklist/data/high-profile-client.json";
+            const data = await loadJsonFromURL(url);
+            populateChecklist(data);
+        }
+
+    </script>
 </body>
 </html>
