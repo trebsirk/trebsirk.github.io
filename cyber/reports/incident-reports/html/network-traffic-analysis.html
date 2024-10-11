@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybersecurity Incident Report</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .section {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .subsection {
+            margin-left: 20px;
+        }
+        .edit-title {
+            font-size: 0.8em;
+            margin-left: 10px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="report-title"></h1>
+        <div id="report-content"></div>
+        <button onclick="clearAllFields()">Clear All Fields</button>
+        <button onclick="downloadReport()">Download Report</button>
+        <button onclick="addSection()">Add Section</button>
+    </div>
+
+    <script>
+
+        async function init(url) {
+            // const playbookUrl = '../../data/compromised-node.json';
+            const data = await loadReportTemplate(url);
+            renderReport(data);
+        }
+
+        async function loadReportTemplate(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error loading playbook:', error);
+                displayErrorMessage();
+            }
+        }
+        let reportData = {
+            "title": "Cybersecurity Incident Report - Network Traffic Analysis",
+            "sections": [
+                {
+                    "title": "Provide a summary of the problem",
+                    "subsections": [
+                        "Include a brief summary of the tcpdump log analysis and identify which protocols were used for the network traffic."
+                    ]
+                },
+                {
+                    "title": "Explain your analysis of the data and provide at least one cause of the incident",
+                    "subsections": [
+                        "State when the problem was first reported.",
+                        "Provide the scenario, events, and symptoms identified when the event was first reported.",
+                        "Explain the current status of the issue.",
+                    ]
+                }
+            ]
+        };
+
+        function renderReport(reportData) {
+            document.getElementById('report-title').textContent = reportData.title;
+            const reportContent = document.getElementById('report-content');
+            reportContent.innerHTML = '';
+
+            reportData.sections.forEach((section, sectionIndex) => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'section';
+                sectionDiv.innerHTML = `
+                    <h2>
+                        <span id="section-title-${sectionIndex}">${section.title}</span>
+                        <button class="edit-title" onclick="editTitle('section', ${sectionIndex})">Edit Title</button>
+                    </h2>
+                    ${section.subsections.map((subsection, subsectionIndex) => `
+                        <div class="subsection">
+                            <h3>
+                                <span id="subsection-title-${sectionIndex}-${subsectionIndex}">${subsection}</span>
+                                <button class="edit-title" onclick="editTitle('subsection', ${sectionIndex}, ${subsectionIndex})">Edit Title</button>
+                            </h3>
+                            <textarea id="section-${sectionIndex}-subsection-${subsectionIndex}" rows="4"></textarea>
+                        </div>
+                    `).join('')}
+                    <button onclick="removeSection(${sectionIndex})">Remove Section</button>
+                    <button onclick="addSubsection(${sectionIndex})">Add Subsection</button>
+                `;
+                reportContent.appendChild(sectionDiv);
+            });
+        }
+
+        function editTitle(type, sectionIndex, subsectionIndex = null) {
+            let currentTitle, newTitle;
+            if (type === 'section') {
+                currentTitle = reportData.sections[sectionIndex].title;
+                newTitle = prompt("Enter new section title:", currentTitle);
+                if (newTitle && newTitle !== currentTitle) {
+                    reportData.sections[sectionIndex].title = newTitle;
+                    document.getElementById(`section-title-${sectionIndex}`).textContent = newTitle;
+                }
+            } else if (type === 'subsection') {
+                currentTitle = reportData.sections[sectionIndex].subsections[subsectionIndex];
+                newTitle = prompt("Enter new subsection title:", currentTitle);
+                if (newTitle && newTitle !== currentTitle) {
+                    reportData.sections[sectionIndex].subsections[subsectionIndex] = newTitle;
+                    document.getElementById(`subsection-title-${sectionIndex}-${subsectionIndex}`).textContent = newTitle;
+                }
+            }
+        }
+
+        function clearAllFields() {
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.value = '';
+            });
+        }
+
+        function downloadReport() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            let yOffset = 10;
+
+            doc.setFontSize(16);
+            doc.text(reportData.title, 10, yOffset);
+            yOffset += 10;
+
+            doc.setFontSize(12);
+            reportData.sections.forEach((section, sectionIndex) => {
+                yOffset += 10;
+                doc.text(section.title, 10, yOffset);
+                yOffset += 5;
+
+                section.subsections.forEach((subsection, subsectionIndex) => {
+                    const content = document.getElementById(`section-${sectionIndex}-subsection-${subsectionIndex}`).value;
+                    doc.setFontSize(10);
+                    doc.text(subsection, 15, yOffset);
+                    yOffset += 5;
+                    doc.setFontSize(9);
+                    const lines = doc.splitTextToSize(content, 180);
+                    doc.text(lines, 20, yOffset);
+                    yOffset += lines.length * 5 + 5;
+
+                    if (yOffset > 280) {
+                        doc.addPage();
+                        yOffset = 10;
+                    }
+                });
+            });
+
+            doc.save('cybersecurity_incident_report.pdf');
+        }
+
+        function addSection() {
+            reportData.sections.push({
+                title: "New Section",
+                subsections: ["New Subsection"]
+            });
+            renderReport();
+        }
+
+        function removeSection(sectionIndex) {
+            reportData.sections.splice(sectionIndex, 1);
+            renderReport();
+        }
+
+        function addSubsection(sectionIndex) {
+            reportData.sections[sectionIndex].subsections.push("New Subsection");
+            renderReport();
+        }
+
+        window.onload = init('../data/network-traffic-analysis.json')
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+    "title": "Cybersecurity Incident Report - Network Traffic Analysis",
+    "sections": [
+        {
+            "title": "Provide a summary of the problem",
+            "subsections": [
+                "Include a brief summary of the tcpdump log analysis and identify which protocols were used for the network traffic.",
+                "Provide a few details on what was indicated in the log.",
+                "Interpret the issues found in the log.",
+                "State when the problem was first reported."
+            ]
+        },
+        {
+            "title": "Explain your analysis of the data and provide at least one cause of the incident",
+            "subsections": [
+                "State when the problem was first reported.",
+                "Provide the scenario, events, and symptoms identified when the event was first reported.",
+                "Explain the current status of the issue.",
+                "Describe info discovered from investigating the issue up to this point in time.",
+                "List the next steps in troubleshooting and resolving the issue.",
+                "Provide the suspected root cause of the problem."
+            ]
+        }
+    ]
+}
