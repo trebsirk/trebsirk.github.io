@@ -1,0 +1,96 @@
+{
+    "tips": [
+      {
+        "title": "Introduce Yourself to the Community",
+        "description": "Create a short introductory video where the candidate shares their background, values, and connection to the community.",
+        "details": {
+          "duration": "2-3 minutes",
+          "content_focus": "Personal introduction, key issues, motivation for running",
+          "style": "Casual, relatable, authentic",
+          "suggestions": [
+            "Film in familiar local locations",
+            "Include personal stories that relate to local issues"
+          ]
+        }
+      },
+      {
+        "title": "Talk About Local Issues",
+        "description": "Post videos explaining key issues affecting the community and what the candidate plans to do about them.",
+        "details": {
+          "duration": "3-5 minutes per issue",
+          "content_focus": "Specific local issues like infrastructure, schools, jobs, etc.",
+          "style": "Informative, data-backed, approachable",
+          "suggestions": [
+            "Use simple language, avoid political jargon",
+            "Incorporate visuals like charts or on-site visits to affected areas"
+          ]
+        }
+      },
+      {
+        "title": "Engage with a Q&A Session",
+        "description": "Host a YouTube Live or pre-recorded Q&A video where the candidate answers questions from the community.",
+        "details": {
+          "duration": "15-30 minutes",
+          "content_focus": "Answering voter questions on key issues, addressing community concerns",
+          "style": "Interactive, conversational, honest",
+          "suggestions": [
+            "Ask for questions from the community on social media beforehand",
+            "Respond to both supportive and challenging questions"
+          ]
+        }
+      },
+      {
+        "title": "Show Behind-the-Scenes of Campaign Life",
+        "description": "Create a video series showing the day-to-day activities of the campaign to humanize the candidate.",
+        "details": {
+          "duration": "2-4 minutes",
+          "content_focus": "Behind-the-scenes of meetings, community events, or preparations",
+          "style": "Personal, engaging, candid",
+          "suggestions": [
+            "Capture moments of community engagement",
+            "Show the team and volunteers working behind the campaign"
+          ]
+        }
+      },
+      {
+        "title": "Highlight Community Stories and Testimonials",
+        "description": "Feature local community members sharing their stories or testimonials about the candidate’s impact or vision.",
+        "details": {
+          "duration": "3-4 minutes",
+          "content_focus": "Personal stories, testimonials from community members or local leaders",
+          "style": "Empathetic, inspiring, community-oriented",
+          "suggestions": [
+            "Film in the community, showing local faces",
+            "Highlight diverse voices and issues that matter to them"
+          ]
+        }
+      },
+      {
+        "title": "Address Election FAQs",
+        "description": "Create a video that answers frequently asked questions about the election process or the candidate’s positions.",
+        "details": {
+          "duration": "5-7 minutes",
+          "content_focus": "Election process, voting, candidate’s key positions",
+          "style": "Clear, educational, direct",
+          "suggestions": [
+            "Answer questions like how and where to vote",
+            "Clarify the candidate’s position on confusing or controversial issues"
+          ]
+        }
+      },
+      {
+        "title": "Share Vision for the Future",
+        "description": "Post a video outlining the candidate’s vision for the future of the community and how they plan to achieve it.",
+        "details": {
+          "duration": "3-5 minutes",
+          "content_focus": "Future goals, policies, and vision for the town",
+          "style": "Aspirational, motivational, focused",
+          "suggestions": [
+            "Incorporate visuals of what the town could look like with the proposed changes",
+            "Use a positive and hopeful tone"
+          ]
+        }
+      }
+    ]
+  }
+  
