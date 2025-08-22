@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Live Glitch — Blue/Green</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --fg:#d7effb;
+      --accent:#49e1b8;
+      --accent2:#1fb1ff;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0; background:radial-gradient(1200px 700px at 60% 40%, #0a2334 0%, #06101a 60%, #02060a 100%);
+      color:var(--fg); font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
+      display:flex; align-items:center; justify-content:center; overflow:hidden;
+    }
+    .wrap{width:min(1200px,95vw);}
+    header{display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:10px;}
+    h1{font-size:clamp(16px,3vw,22px); font-weight:700; letter-spacing:.5px; margin:0; opacity:.9}
+    .panel{display:grid; grid-template-columns: 1fr; gap:10px;}
+    .stage{position:relative; width:100%; aspect-ratio:16/9; border-radius:18px; overflow:hidden;
+      box-shadow:0 10px 40px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.06);
+      background:#03080e;}
+    canvas, video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+    video{opacity:0;}
+    .controls{display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-top:12px;}
+    fieldset{border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:10px 12px; background:rgba(5,12,18,.5);}
+    legend{padding:0 6px; color:#b6e8ff; font-size:12px; letter-spacing:.4px;}
+    .row{display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center; margin:6px 0}
+    label{font-size:12px; opacity:.8}
+    input[type=range]{width:100%}
+    button{appearance:none; border:0; border-radius:12px; padding:10px 14px; font-weight:700; letter-spacing:.3px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#071218; cursor:pointer;
+      box-shadow:0 8px 24px rgba(29,190,255,.25);}
+    button.secondary{background:rgba(255,255,255,.08); color:#cde9ff; box-shadow:none}
+    .hint{font-size:12px; opacity:.75; margin-top:6px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Live Glitch Capture — Blue/Green Palette</h1>
+      <div>
+        <button id="btnStart">Start Camera</button>
+        <button id="btnStop" class="secondary">Stop</button>
+        <button id="btnSnap" class="secondary">Save PNG</button>
+      </div>
+    </header>
+
+    <div class="panel">
+      <div class="stage">
+        <video id="video" playsinline muted></video>
+        <canvas id="gl"></canvas>
+      </div>
+
+      <div class="controls">
+        <fieldset>
+          <legend>Glitch</legend>
+          <div class="row"><label>Intensity</label><span><input id="glitchAmt" type="range" min="0" max="1" step="0.001" value="0.35"></span></div>
+          <div class="row"><label>Blockiness</label><span><input id="blockiness" type="range" min="0" max="1" step="0.001" value="0.25"></span></div>
+          <div class="row"><label>RGB Shift</label><span><input id="rgbShift" type="range" min="0" max="2" step="0.001" value="0.6"></span></div>
+          <div class="row"><label>Scanlines</label><span><input id="scanline" type="range" min="0" max="1" step="0.001" value="0.25"></span></div>
+        </fieldset>
+        <fieldset>
+          <legend>Color Grade</legend>
+          <div class="row"><label>Teal Mix</label><span><input id="tealMix" type="range" min="0" max="1" step="0.001" value="0.9"></span></div>
+          <div class="row"><label>Contrast</label><span><input id="contrast" type="range" min="0.5" max="2.0" step="0.001" value="1.1"></span></div>
+          <div class="row"><label>Vignette</label><span><input id="vignette" type="range" min="0" max="1.0" step="0.001" value="0.35"></span></div>
+        </fieldset>
+        <fieldset>
+          <legend>Dynamics</legend>
+          <div class="row"><label>Speed</label><span><input id="speed" type="range" min="0" max="3" step="0.001" value="1.0"></span></div>
+          <div class="row"><label>Freeze</label><span><input id="freeze" type="checkbox"></span></div>
+          <div class="hint">Tip: raise <b>Intensity</b> and <b>RGB Shift</b> for aggressive glitch bursts; tune <b>Teal Mix</b> for the blue/green mood.</div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- WebGL setup helpers ---
+    const glCanvas = document.getElementById('gl');
+    const videoEl = document.getElementById('video');
+    let gl, program, tex, posBuf; let raf = 0; let timeStart = performance.now();
+
+    const vertSrc = `#version 300 es
+    precision mediump float;
+    const vec2 QUAD[4] = vec2[4](vec2(-1.,-1.), vec2(1.,-1.), vec2(-1.,1.), vec2(1.,1.));
+    out vec2 vUV;
+    void main(){
+      gl_Position = vec4(QUAD[gl_VertexID], 0., 1.);
+      vUV = QUAD[gl_VertexID]*0.5+0.5;
+    }`;
+
+    const fragSrc = `#version 300 es
+    precision highp float;
+    in vec2 vUV; out vec4 outColor; 
+    uniform sampler2D frame; 
+    uniform vec2 res; 
+    uniform float t; 
+    uniform float glitchAmt; 
+    uniform float blockiness; 
+    uniform float rgbShift; 
+    uniform float scanline; 
+    uniform float tealMix; 
+    uniform float contrast; 
+    uniform float vignette; 
+
+    // hash & noise
+    float hash21(vec2 p){
+      p = fract(p*vec2(123.34, 345.45));
+      p += dot(p, p+34.345);
+      return fract(p.x*p.y);
+    }
+    float noise(vec2 p){
+      vec2 i=floor(p), f=fract(p);
+      float a=hash21(i), b=hash21(i+vec2(1,0)), c=hash21(i+vec2(0,1)), d=hash21(i+vec2(1,1));
+      vec2 u=f*f*(3.-2.*f); 
+      return mix(a,b,u.x)+ (c-a)*u.y*(1.-u.x) + (d-b)*u.x*u.y; 
+    }
+
+    vec3 gradeTeal(vec3 col){
+      // Lift-gamma-gain style teal map
+      float l = dot(col, vec3(0.2126,0.7152,0.0722));
+      vec3 deep = vec3(0.02, 0.14, 0.35);  // dark blue
+      vec3 mid  = vec3(0.00, 0.65, 0.55);  // green-cyan
+      vec3 ramp = mix(deep, mid, smoothstep(0.05, 0.95, l));
+      col = mix(col, ramp, tealMix);
+      // Contrast
+      col = (col-0.5)*contrast + 0.5;
+      return clamp(col, 0.0, 1.0);
+    }
+
+    void main(){
+      vec2 uv = vUV;
+      float aspect = res.x/res.y;
+
+      // Horizontal slice displacement (glitch)
+      float bands = mix(40., 400., blockiness);
+      float n = noise(vec2(uv.y*bands, t*1.3));
+      float slice = (n-0.5) * 0.25 * glitchAmt; // base offset
+      // occasional heavy bursts
+      float burst = step(0.96, fract(sin(t*3.7+uv.y*10.0)*43758.5453));
+      slice += burst * (hash21(vec2(uv.y*20.0, t))*0.5*glitchAmt);
+      uv.x += slice;
+
+      // RGB channel offsets
+      float sh = rgbShift * 0.0025;
+      vec2 off = vec2(sh*noise(vec2(t*0.7, uv.y*90.0)), 0.0);
+      vec3 col;
+      col.r = texture(frame, uv + off).r;
+      col.g = texture(frame, uv).g;
+      col.b = texture(frame, uv - off).b;
+
+      // Pixel block jump (datamosh feel)
+      float px = mix(1., 40., blockiness);
+      vec2 grid = floor(uv*res/px)*px/res;
+      float j = step(0.8, noise(vec2(t*2.0, grid.y*80.0)))*glitchAmt;
+      col = mix(col, texture(frame, grid).rgb, j);
+
+      // Scanlines & grain
+      float sl = sin(uv.y*res.y*3.14159*1.5 + t*12.0)*0.04*scanline;
+      float grain = (hash21(uv*res.xy + t) - 0.5)*0.06;
+      col += sl + grain;
+
+      // Blue/Green grading
+      col = gradeTeal(col);
+
+      // Vignette & subtle bloom
+      float vig = smoothstep(1.4, 0.2, length((uv-0.5)*vec2(aspect,1.0)));
+      col *= mix(1.0, vig, vignette);
+      col += pow(max(col-0.6,0.0), vec3(2.0)) * 0.08; // bloom
+
+      outColor = vec4(col, 1.0);
+    }`;
+
+    function makeGL(){
+      gl = glCanvas.getContext('webgl2', {premultipliedAlpha:false});
+      if(!gl){ alert('WebGL2 not supported. Try a modern browser.'); return; }
+      const vs = gl.createShader(gl.VERTEX_SHADER); gl.shaderSource(vs, vertSrc); gl.compileShader(vs);
+      const fs = gl.createShader(gl.FRAGMENT_SHADER); gl.shaderSource(fs, fragSrc); gl.compileShader(fs);
+      if(!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(vs));
+      if(!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(fs));
+      program = gl.createProgram(); gl.attachShader(program, vs); gl.attachShader(program, fs); gl.linkProgram(program);
+      if(!gl.getProgramParameter(program, gl.LINK_STATUS)) console.error(gl.getProgramInfoLog(program));
+      gl.useProgram(program);
+      posBuf = gl.createBuffer();
+      tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    }
+
+    function resize(){
+      const dpr = Math.min(window.devicePixelRatio||1, 2);
+      const rect = glCanvas.getBoundingClientRect();
+      glCanvas.width = Math.round(rect.width * dpr);
+      glCanvas.height = Math.round(rect.height * dpr);
+      if(gl) gl.viewport(0,0,glCanvas.width, glCanvas.height);
+    }
+    window.addEventListener('resize', resize);
+
+    // --- Camera ---
+    async function startCam(){
+      try{
+        const stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user', width:{ideal:1280}, height:{ideal:720}}, audio:false});
+        videoEl.srcObject = stream; await videoEl.play();
+        resize();
+        loop();
+      }catch(err){
+        alert('Camera error: '+err.message);
+      }
+    }
+
+    function stopCam(){
+      const s = videoEl.srcObject; if(!s) return; s.getTracks().forEach(tr=>tr.stop()); videoEl.srcObject = null; cancelAnimationFrame(raf);
+    }
+
+    // --- Render loop ---
+    function loop(){
+      raf = requestAnimationFrame(loop);
+      if(!gl || videoEl.readyState < 2) return;
+      const now = performance.now();
+      const freeze = document.getElementById('freeze').checked;
+      const t = (freeze ? timeStart : now) * 0.001 * parseFloat(document.getElementById('speed').value);
+
+      gl.useProgram(program);
+      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, videoEl);
+
+      gl.uniform1i(gl.getUniformLocation(program,'frame'), 0);
+      gl.uniform2f(gl.getUniformLocation(program,'res'), glCanvas.width, glCanvas.height);
+      gl.uniform1f(gl.getUniformLocation(program,'t'), t);
+
+      gl.uniform1f(gl.getUniformLocation(program,'glitchAmt'), parseFloat(document.getElementById('glitchAmt').value));
+      gl.uniform1f(gl.getUniformLocation(program,'blockiness'), parseFloat(document.getElementById('blockiness').value));
+      gl.uniform1f(gl.getUniformLocation(program,'rgbShift'), parseFloat(document.getElementById('rgbShift').value));
+      gl.uniform1f(gl.getUniformLocation(program,'scanline'), parseFloat(document.getElementById('scanline').value));
+      gl.uniform1f(gl.getUniformLocation(program,'tealMix'), parseFloat(document.getElementById('tealMix').value));
+      gl.uniform1f(gl.getUniformLocation(program,'contrast'), parseFloat(document.getElementById('contrast').value));
+      gl.uniform1f(gl.getUniformLocation(program,'vignette'), parseFloat(document.getElementById('vignette').value));
+
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+
+    // --- UI ---
+    document.getElementById('btnStart').addEventListener('click', async()=>{
+      if(!gl) makeGL();
+      timeStart = performance.now();
+      await startCam();
+    });
+    document.getElementById('btnStop').addEventListener('click', ()=>{ stopCam(); });
+
+    document.getElementById('btnSnap').addEventListener('click', ()=>{
+      const a = document.createElement('a');
+      a.download = 'glitch_capture_'+Date.now()+'.png';
+      a.href = glCanvas.toDataURL('image/png');
+      a.click();
+    });
+
+    // Auto init GL so resizing works; start cam only on button for permissions friendliness
+    makeGL(); resize();
+  </script>
+</body>
+</html>
