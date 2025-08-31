@@ -178,7 +178,7 @@
     }`;
 
     function makeGL(){
-      gl = glCanvas.getContext('webgl2', {premultipliedAlpha:false});
+      gl = glCanvas.getContext('webgl2', {premultipliedAlpha:false, preserveDrawingBuffer:true});
       if(!gl){ alert('WebGL2 not supported. Try a modern browser.'); return; }
       const vs = gl.createShader(gl.VERTEX_SHADER); gl.shaderSource(vs, vertSrc); gl.compileShader(vs);
       const fs = gl.createShader(gl.FRAGMENT_SHADER); gl.shaderSource(fs, fragSrc); gl.compileShader(fs);
@@ -257,10 +257,29 @@
     document.getElementById('btnStop').addEventListener('click', ()=>{ stopCam(); });
 
     document.getElementById('btnSnap').addEventListener('click', ()=>{
-      const a = document.createElement('a');
-      a.download = 'glitch_capture_'+Date.now()+'.png';
-      a.href = glCanvas.toDataURL('image/png');
-      a.click();
+      if(!gl) return;
+      // Ensure GPU work is done and the buffer is preserved for capture
+      gl.finish();
+      const fileName = 'glitch_capture_'+Date.now()+'.png';
+      if (HTMLCanvasElement.prototype.toBlob) {
+        glCanvas.toBlob((blob)=>{
+          if(!blob){ console.warn('toBlob returned null, falling back to dataURL'); fallback(); return; }
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.download = fileName;
+          a.href = url;
+          a.click();
+          setTimeout(()=>URL.revokeObjectURL(url), 1000);
+        }, 'image/png');
+      } else {
+        fallback();
+      }
+      function fallback(){
+        const a = document.createElement('a');
+        a.download = fileName;
+        a.href = glCanvas.toDataURL('image/png');
+        a.click();
+      }
     });
 
     // Auto init GL so resizing works; start cam only on button for permissions friendliness
