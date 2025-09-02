@@ -17,3 +17,7 @@ body {
 .limited-width {
     max-width: 600px; /* Limit width to 400 pixels */
 }
+
+* {
+    font-size: 18px;
+}

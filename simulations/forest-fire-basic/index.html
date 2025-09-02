@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forest Fire Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Forest Fire Simulator</h1>
+    <canvas id="forestCanvas" width="400" height="400"></canvas>
+    <div class="controls">
+        <button id="startStopBtn">Start</button>
+        <select id="speedToggle">
+            <option value="1000">Slow</option>
+            <option value="500" selected>Normal</option>
+            <option value="200">Fast</option>
+        </select>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('forestCanvas');
+        const ctx = canvas.getContext('2d');
+        const gridSize = 40; // 20x20 grid
+        const cellSize = canvas.width / gridSize; // 20px per cell
+        const EMPTY = 0, TREE = 1, BURNING = 2;
+        let grid = [];
+        let isRunning = false;
+        let intervalId = null;
+        let speed = 500; // Default speed (ms)
+
+        // Initialize grid with 60% trees, 40% empty
+        function initGrid() {
+            grid = Array(gridSize).fill().map(() =>
+                Array(gridSize).fill().map(() => Math.random() < 0.3 ? TREE : EMPTY)
+            );
+        }
+
+        // Draw the grid on the canvas
+        function drawGrid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    ctx.fillStyle = grid[i][j] === EMPTY ? 'white' : grid[i][j] === TREE ? 'green' : 'red';
+                    ctx.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+                    ctx.strokeRect(j * cellSize, i * cellSize, cellSize, cellSize);
+                }
+            }
+        }
+
+        // Update grid based on fire spread rules
+        function updateGrid() {
+            const newGrid = grid.map(row => [...row]);
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    if (grid[i][j] === BURNING) {
+                        newGrid[i][j] = EMPTY; // Burning cells become empty
+                    } else if (grid[i][j] === TREE) {
+                        // Check neighbors for fire
+                        const neighbors = [
+                            [i - 1, j], [i + 1, j], [i, j - 1], [i, j + 1]
+                        ].filter(([ni, nj]) => ni >= 0 && ni < gridSize && nj >= 0 && nj < gridSize);
+                        if (neighbors.some(([ni, nj]) => grid[ni][nj] === BURNING)) {
+                            newGrid[i][j] = BURNING; // Tree catches fire
+                        } else if (Math.random() < 0.01) {
+                            newGrid[i][j] = BURNING; // Spontaneous fire (1% chance)
+                        }
+                    }
+                }
+            }
+            grid = newGrid;
+            drawGrid();
+        }
+
+        // Start or stop the simulation
+        document.getElementById('startStopBtn').addEventListener('click', () => {
+            isRunning = !isRunning;
+            document.getElementById('startStopBtn').textContent = isRunning ? 'Stop' : 'Start';
+            if (isRunning) {
+                intervalId = setInterval(updateGrid, speed);
+            } else {
+                clearInterval(intervalId);
+            }
+        });
+
+        // Update speed when toggle changes
+        document.getElementById('speedToggle').addEventListener('change', (e) => {
+            speed = parseInt(e.target.value);
+            if (isRunning) {
+                clearInterval(intervalId);
+                intervalId = setInterval(updateGrid, speed);
+            }
+        });
+
+        // Initialize and draw the grid
+        initGrid();
+        drawGrid();
+    </script>
+</body>
+</html>
