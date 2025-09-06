@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Color Palette Demo</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: #f4f4f4;
+      color: #222;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+    }
+
+    .palettes {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .palette {
+      display: flex;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 6px;
+      overflow: hidden;
+      transition: border 0.2s;
+    }
+
+    .palette:hover {
+      border-color: #999;
+    }
+
+    .color {
+      width: 40px;
+      height: 40px;
+    }
+
+    .palette.active {
+      border-color: #000;
+    }
+
+    .demo {
+      padding: 2rem;
+      border-radius: 8px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .demo h2 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Color Palette Demo</h1>
+  <div class="palettes">
+    <div class="palette" data-palette="1">
+      <div class="color" style="background:#2563eb"></div>
+      <div class="color" style="background:#60a5fa"></div>
+      <div class="color" style="background:#dbeafe"></div>
+    </div>
+    <div class="palette" data-palette="2">
+      <div class="color" style="background:#16a34a"></div>
+      <div class="color" style="background:#4ade80"></div>
+      <div class="color" style="background:#dcfce7"></div>
+    </div>
+    <div class="palette" data-palette="3">
+      <div class="color" style="background:#9333ea"></div>
+      <div class="color" style="background:#c084fc"></div>
+      <div class="color" style="background:#f3e8ff"></div>
+    </div>
+  </div>
+
+  <div class="demo" id="demoBox">
+    <h2>Demo Heading</h2>
+    <p>This is a sample text block. Selecting a palette above will change the colors used here.</p>
+  </div>
+
+  <script>
+    const palettes = {
+      1: { bg: "#dbeafe", heading: "#2563eb", text: "#1e3a8a" },
+      2: { bg: "#dcfce7", heading: "#16a34a", text: "#14532d" },
+      3: { bg: "#f3e8ff", heading: "#9333ea", text: "#581c87" },
+    };
+
+    const demoBox = document.getElementById("demoBox");
+    const paletteEls = document.querySelectorAll(".palette");
+
+    function applyPalette(id) {
+      const p = palettes[id];
+      demoBox.style.background = p.bg;
+      demoBox.querySelector("h2").style.color = p.heading;
+      demoBox.querySelector("p").style.color = p.text;
+
+      paletteEls.forEach(el => el.classList.remove("active"));
+      document.querySelector(`.palette[data-palette="${id}"]`).classList.add("active");
+    }
+
+    paletteEls.forEach(el => {
+      el.addEventListener("click", () => {
+        applyPalette(el.dataset.palette);
+      });
+    });
+
+    // initialize with palette 1
+    applyPalette(2);
+  </script>
+</body>
+</html>
