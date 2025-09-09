@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title>Simple Portfolio — Theme Toggle</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Simple Portfolio — Theme Toggle</title>
 
-        <style>
+    <style>
     /* Light theme variables */
     [data-theme="light"] {
       --bg: #ffffff;
@@ -162,151 +162,164 @@
     }
     a:hover { text-decoration: underline; }
   </style>
-    </head>
-    <body data-theme="light">
-        <div class="container" id="page">
-            <header>
-                <div>
-                    <h1>Portfolio</h1>
-                    <p class="lead">A little demo page.</p>
-                </div>
-
-                <div class="theme-toggle">
-                    <label id="themeLabel"
-                        style="font-size:0.92rem; color:var(--muted);">Theme</label>
-                    <div class="switch" role="switch" aria-checked="false"
-                        tabindex="0">
-                        <input id="themeSwitch" type="checkbox"
-                            aria-labelledby="themeLabel" />
-                        <div class="knob" aria-hidden="true">☀</div>
-                    </div>
-                </div>
-            </header>
-
-            <main>
-                <section class="card">
-                    <h3>About</h3>
-                    <p style="margin-top:6px;color:var(--muted);">
-                        I'm a software engineer with experience in data
-                        engineering, web design, and cyber security.
-                    </p>
-                </section>
-
-                <section class="card">
-                    <h3>Websites I design or maintain</h3>
-                    <ul>
-                        <li><a href="http://alpost49.org">American Legion Post
-                                49</a></li>
-                    </ul>
-                </section>
-
-                <section class="card">
-                    <a href="#simulations"></a>
-                    <div>
-                        <h3>Simulations</h3>
-                        <ul>
-                            <li><a
-                                    href="simulations/forest-fire-basic/index.html">Forest
-                                    Fire</a></li>
-                        </ul>
-
-                    </div>
-                </section>
-
-                <section class="card">
-                    <h3>Cyber</h3>
-                    <ul>
-                      <li>Home Wifi</li>
-                      <ul>
-                        <li>
-                          <a href="cyber/checklist/home-wifi/index.html">
-                            Home Wi-Fi Defensive Checklist and Playbook
-                        </a></li>
-                      </ul>
-                    </ul>
-                    <ul>
-                        <li>Security Audit Checklists</li>
-                        <ul>
-                            <li><a
-                                    href="cyber/checklist/dark-web-market-crypto/index.html">Anonymous
-                                    Web Market (Crypto)</a></li>
-                            <li><a
-                                    href="cyber/checklist/dark-web-market-fiat/index.html">Anonymous
-                                    Web Market (Fiat)</a></li>
-                            <li><a
-                                    href="cyber/checklist/small-it-company/index.html">Small
-                                    I.T. Company</a></li>
-                            <li><a
-                                    href="cyber/checklist/high-profile-clients/index.html">High
-                                    Profile Clients</a></li>
-                            <li><a
-                                    href="cyber/checklist/test/index.html">test</a></li>
-                        </ul>
-                        <li>Incident Response Playbooks</li>
-                        <ul>
-                            <li><a
-                                    href="cyber/playbooks/html/compromised-node/">Responding
-                                    to a Compromised Network Node</a></li>
-                            <li><a href="cyber/playbooks/html/ddos/">Responding
-                                    to a
-                                    DDos Attack</a></li>
-                            <li><a href="cyber/playbooks/html/malware/">Incident
-                                    Response for Malware Infection</a></li>
-
-                        </ul>
-                        <li>Incident Reports</li>
-                        <ul>
-                            <li><a
-                                    href="cyber/reports/incident-reports/html/network-traffic-analysis.html">Network
-                                    Traffic Analysis</a></li>
-                        </ul>
-                    </ul>
-                </section>
-
-                <section class="card">
-
-                    <h3>Miscellaneous</h3>
-                    <ul>
-                        <li><a href="caesar-cipher">Caesar Cipher using plain
-                                javascript</a></li>
-                        <li><a href="spinners">Random Spinner Code</a></li>
-                        <li><a href="network-defense">Network Defense
-                                "game"</a></li>
-                        <li>
-                            <a href="glitch-webcam">Glitch Webcam Project</a>
-                            <br>
-                            <img style="padding-left:20px"
-                                src="glitch-webcam/glitch_capture_1755899759588.jpg"
-                                alt="glitch webcam screenshot" width="177"
-                                height="100">
-                        </li>
-                        <li>
-                          <a href="color-palette/color-demo.html">Color palette picker</a>
-                          <br>
-                          <img style="padding-left:20px"
-                                src="color-palette/color-palette-picker.png"
-                                alt="color palette picker" width="177"
-                                height="auto">
-                        </li>
-
-                    </ul>
-                </section>
-
-                <section class="card">
-                    <h3>Contact or Support</h3>
-                    <p style="margin:6px 0 0 0;color:var(--muted);">You can
-                        email me at <a
-                            href="mailto:trebsirk@gmail.com">trebsirk@gmail.com</a></p>
-                    <p style="margin:6px 0 0 0;color:var(--muted);">You can also
-                        support me on <a
-                            href="http://patreon.com/DavidWright921">Patreon</a>.</p>
-                </section>
-
-                <footer>Tip: the page remembers your theme preference.</footer>
-            </main>
+  </head>
+  <body data-theme="light">
+    <div class="container" id="page">
+      <header>
+        <div>
+          <h1>Portfolio</h1>
+          <p class="lead">A little demo page.</p>
         </div>
 
-        <script>
+        <div class="theme-toggle">
+          <label id="themeLabel"
+            style="font-size:0.92rem; color:var(--muted);">Theme</label>
+          <div class="switch" role="switch" aria-checked="false"
+            tabindex="0">
+            <input id="themeSwitch" type="checkbox"
+              aria-labelledby="themeLabel" />
+            <div class="knob" aria-hidden="true">☀</div>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="card">
+          <h3>About</h3>
+          <p style="margin-top:6px;color:var(--muted);">
+            I'm a software engineer with experience in data
+            engineering, web design, and cyber security.
+          </p>
+        </section>
+
+        <section class="card">
+          <h3>Websites I design or maintain</h3>
+          <ul>
+            <li><a href="http://alpost49.org">American Legion Post
+                49</a></li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <a href="#simulations"></a>
+          <div>
+            <h3>Simulations</h3>
+            <ul>
+              <li><a
+                  href="simulations/forest-fire-basic/index.html">Forest
+                  Fire</a></li>
+            </ul>
+
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>Cyber Security</h3>
+          <ul>
+            <li>Home Wifi</li>
+            <ul>
+              <li>
+                <a href="cyber/checklist/home-wifi/index.html">
+                  Home Wi-Fi Defensive Checklist and Playbook
+                </a></li>
+            </ul>
+          </ul>
+          <ul>
+            <li>Security Audit Checklists</li>
+            <ul>
+              <li><a
+                  href="cyber/checklist/dark-web-market-crypto/index.html">Anonymous
+                  Web Market (Crypto)</a></li>
+              <li><a
+                  href="cyber/checklist/dark-web-market-fiat/index.html">Anonymous
+                  Web Market (Fiat)</a></li>
+              <li><a
+                  href="cyber/checklist/small-it-company/index.html">Small
+                  I.T. Company</a></li>
+              <li><a
+                  href="cyber/checklist/high-profile-clients/index.html">High
+                  Profile Clients</a></li>
+              <li><a
+                  href="cyber/checklist/test/index.html">test</a></li>
+            </ul>
+            <li>Incident Response Playbooks</li>
+            <ul>
+              <li><a
+                  href="cyber/playbooks/html/compromised-node/">Responding
+                  to a Compromised Network Node</a></li>
+              <li><a href="cyber/playbooks/html/ddos/">Responding
+                  to a
+                  DDos Attack</a></li>
+              <li><a href="cyber/playbooks/html/malware/">Incident
+                  Response for Malware Infection</a></li>
+
+            </ul>
+            <li>Incident Reports</li>
+            <ul>
+              <li><a
+                  href="cyber/reports/incident-reports/html/network-traffic-analysis.html">Network
+                  Traffic Analysis</a></li>
+            </ul>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h3>Physical Security</h3>
+          <ul>
+            <li>Home and Neighborhood Defense</li>
+            <ul>
+              <li>
+                <a href="physical-sec/home-defense/index.html">
+                  Home & Neighborhood Defensive Checklist and Playbook
+                </a></li>
+            </ul>
+          </ul>
+        </section>
+
+        <section class="card">
+
+          <h3>Miscellaneous</h3>
+          <ul>
+            <li><a href="caesar-cipher">Caesar Cipher using plain
+                javascript</a></li>
+            <li><a href="spinners">Random Spinner Code</a></li>
+            <li><a href="network-defense">Network Defense
+                "game"</a></li>
+            <li>
+              <a href="glitch-webcam">Glitch Webcam Project</a>
+              <br>
+              <img style="padding-left:20px"
+                src="glitch-webcam/glitch_capture_1755899759588.jpg"
+                alt="glitch webcam screenshot" width="177"
+                height="100">
+            </li>
+            <li>
+              <a href="color-palette/color-demo.html">Color palette picker</a>
+              <br>
+              <img style="padding-left:20px"
+                src="color-palette/color-palette-picker.png"
+                alt="color palette picker" width="177"
+                height="auto">
+            </li>
+
+          </ul>
+        </section>
+
+        <section class="card">
+          <h3>Contact or Support</h3>
+          <p style="margin:6px 0 0 0;color:var(--muted);">You can
+            email me at <a
+              href="mailto:trebsirk@gmail.com">trebsirk@gmail.com</a></p>
+          <p style="margin:6px 0 0 0;color:var(--muted);">You can also
+            support me on <a
+              href="http://patreon.com/DavidWright921">Patreon</a>.</p>
+        </section>
+
+        <footer>Tip: the page remembers your theme preference.</footer>
+      </main>
+    </div>
+
+    <script>
     (function() {
       const root = document.body;
       const switchInput = document.getElementById('themeSwitch');
@@ -355,5 +368,5 @@
       });
     })();
   </script>
-    </body>
+  </body>
 </html>

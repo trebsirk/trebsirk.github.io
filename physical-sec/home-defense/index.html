@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Home & Neighborhood Defensive Playbook</title>
+  <style>
+    :root{--bg:#071021;--card:#071827;--muted:#9aa4b2;--accent:#60a5fa;--success:#34d399;--maxw:980px;color-scheme:dark}
+    *{box-sizing:border-box}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:20px; background:linear-gradient(180deg,#020617 0%, #071827 100%); color:#e6eef6}
+    .wrap{max-width:var(--maxw);margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    h1{font-size:1.4rem;margin:0}
+    p.lead{color:var(--muted);margin:6px 0 14px}
+    .controls{display:flex;gap:8px}
+    button{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--accent);padding:8px 12px;border-radius:8px;cursor:pointer}
+    main{display:grid;grid-template-columns:1fr 340px;gap:18px;align-items:start}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;box-shadow:0 8px 24px rgba(2,6,23,0.6)}
+    section h2{margin-top:0}
+    ul.checklist{list-style:none;padding:0;margin:8px 0}
+    ul.checklist li{display:flex;gap:12px;align-items:flex-start;padding:10px 6px;border-radius:8px}
+    ul.checklist li label{flex:1}
+    .muted{color:var(--muted);font-size:0.95rem}
+    aside{position:sticky;top:24px}
+    .small{font-size:0.95rem}
+    .summary{background:linear-gradient(90deg, rgba(96,165,250,0.06), rgba(52,211,153,0.03));padding:12px;border-radius:8px;color:var(--muted)}
+    details{background:transparent;border-radius:8px;padding:8px}
+    summary{cursor:pointer}
+    pre{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;overflow:auto}
+    footer{margin-top:18px;color:var(--muted);font-size:0.9rem}
+    #wifiStatus{margin-top:8px;font-size:0.95rem}
+    #wifiStatus span{display:inline-block;margin-top:4px}
+    #wifiStatus .online{color:var(--success)}
+    #wifiStatus .offline{color:#f87171}
+    .emoji{font-size:1.1rem;margin-right:8px}
+    @media (max-width:980px){main{grid-template-columns:1fr}aside{position:static}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>🏠🛡️ Home &amp; Neighborhood Defensive Playbook</h1>
+        <p class="lead">Practical checklist and playbook for defending against human and extraterrestrial threats — retain the emoji, interactive checklists, and diagnostic tools.</p>
+      </div>
+      <div class="controls">
+        <button id="printBtn">Print</button>
+        <button id="exportBtn">Download HTML</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="card">
+        <section id="situational">
+          <h2>1. Foundations: Situational Awareness 📡👀</h2>
+          <ul class="checklist">
+            <li><input type="checkbox" id="watch"><label for="watch"><strong>Neighborhood Watch</strong> — set up communication tree (texts, radios, group apps).</label></li>
+            <li><input type="checkbox" id="surv"><label for="surv"><strong>Surveillance</strong> — cameras, motion lights, observers at key entry points.</label></li>
+            <li><input type="checkbox" id="sky"><label for="sky"><strong>Sky Scan</strong> — binoculars, telescopes, or drones for aerial anomalies.</label></li>
+            <li><input type="checkbox" id="map"><label for="map"><strong>Map Resources</strong> — exits, high ground, water sources, and choke points.</label></li>
+          </ul>
+        </section>
+
+        <section id="physical">
+          <h2>2. Physical Defenses 🚪🪖</h2>
+          <h3 class="muted" style="margin-bottom:6px">Against Humans</h3>
+          <ul class="checklist">
+            <li><input type="checkbox" id="reinforce"><label for="reinforce"><strong>Reinforce doors &amp; windows</strong> — security film, bars.</label></li>
+            <li><input type="checkbox" id="perimeter"><label for="perimeter"><strong>Defensive perimeters</strong> — fences, barriers, sandbags.</label></li>
+            <li><input type="checkbox" id="locks"><label for="locks"><strong>Locks &amp; alarms</strong> — controlled entry points.</label></li>
+          </ul>
+          <h3 class="muted" style="margin-bottom:6px">Against Aliens</h3>
+          <ul class="checklist">
+            <li><input type="checkbox" id="shield"><label for="shield"><strong>Field shielding</strong> — use earth, water barrels, or metal for partial energy protection.</label></li>
+            <li><input type="checkbox" id="lights"><label for="lights"><strong>High-intensity lights &amp; lasers</strong> — disorient targeting systems.</label></li>
+            <li><input type="checkbox" id="decoys"><label for="decoys"><strong>Decoys &amp; heat sources</strong> — inflatable vehicles, false heat signatures.</label></li>
+          </ul>
+        </section>
+
+        <section id="community">
+          <h2>3. Community Organization 🗣️🤝</h2>
+          <ul class="checklist">
+            <li><input type="checkbox" id="roles"><label for="roles"><strong>Assign roles</strong> — scouts, defenders, medics, engineers, communicators.</label></li>
+            <li><input type="checkbox" id="comms"><label for="comms"><strong>Redundant communications</strong> — radios, signal flares, whistle codes.</label></li>
+            <li><input type="checkbox" id="shelter"><label for="shelter"><strong>Central shelter</strong> — basements, reinforced buildings.</label></li>
+            <li><input type="checkbox" id="power"><label for="power"><strong>Power backup</strong> — generators, solar, hand-crank devices.</label></li>
+          </ul>
+        </section>
+
+        <section id="supplies">
+          <h2>4. Supplies &amp; Logistics 💧🍲🔋</h2>
+          <ul class="checklist">
+            <li><input type="checkbox" id="water"><label for="water"><strong>Water storage</strong> — 1 gallon/person/day minimum.</label></li>
+            <li><input type="checkbox" id="food"><label for="food"><strong>Long-term food</strong> — canned, freeze-dried, grains.</label></li>
+            <li><input type="checkbox" id="medical"><label for="medical"><strong>Medical supplies</strong> — first aid &amp; trauma kits.</label></li>
+            <li><input type="checkbox" id="powerbank"><label for="powerbank"><strong>Power &amp; fuel</strong> — batteries, solar, fuel for generators.</label></li>
+          </ul>
+        </section>
+
+        <section id="counter">
+          <h2>5. Countermeasures 🧰📡</h2>
+          <h3 class="muted">Human Intruders</h3>
+          <ul class="checklist">
+            <li><input type="checkbox" id="obstacles"><label for="obstacles"><strong>Obstacles</strong> — barricades, spike strips, blocked roads.</label></li>
+            <li><input type="checkbox" id="smoke"><label for="smoke"><strong>Smoke &amp; lights</strong> — confuse intruders.</label></li>
+            <li><input type="checkbox" id="alarms2"><label for="alarms2"><strong>Alarm systems</strong> — mobilize defenders quickly.</label></li>
+          </ul>
+          <h3 class="muted">Alien Threats</h3>
+          <ul class="checklist">
+            <li><input type="checkbox" id="jammers"><label for="jammers"><strong>Signal disruption</strong> — jammers, EMP-safe containers for critical electronics.</label></li>
+            <li><input type="checkbox" id="underground"><label for="underground"><strong>Underground shelters</strong> — shielded from scanners/weapons.</label></li>
+            <li><input type="checkbox" id="relocate"><label for="relocate"><strong>Rapid relocation drills</strong> — avoid mass targeting.</label></li>
+          </ul>
+        </section>
+
+        <section id="psyche">
+          <h2>6. Psychological Resilience 🙌🎶</h2>
+          <ul class="checklist">
+            <li><input type="checkbox" id="morale"><label for="morale"><strong>Build morale</strong> — shared meals, meetings, storytelling.</label></li>
+            <li><input type="checkbox" id="routines"><label for="routines"><strong>Routines</strong> — music, exercise, stress-management drills.</label></li>
+          </ul>
+        </section>
+
+        <section id="emergency">
+          <h2>7. Emergency Response Playbook 🚨</h2>
+          <div class="muted small">If an invasion begins, follow these steps in order:</div>
+          <ol class="muted small" style="margin-top:8px">
+            <li>Sound the alarm (sirens, radios, messages).</li>
+            <li>Move civilians into secure shelters.</li>
+            <li>Activate defenses (lights, barriers, decoys).</li>
+            <li>Assign scouts to monitor and report.</li>
+            <li>Deploy countermeasures appropriate to the attacker.</li>
+            <li>Fallback plan — secondary rally points if overrun.</li>
+          </ol>
+        </section>
+
+        <section id="recovery">
+          <h2>8. Recovery &amp; Continuity 🔧🏥🌱</h2>
+          <ul class="checklist">
+            <li><input type="checkbox" id="repair"><label for="repair"><strong>Repair teams</strong> for infrastructure (water, power, comms).</label></li>
+            <li><input type="checkbox" id="triage"><label for="triage"><strong>Medical triage</strong> for casualties.</label></li>
+            <li><input type="checkbox" id="sustain"><label for="sustain"><strong>Sustainable living</strong> — gardening, livestock, foraging.</label></li>
+            <li><input type="checkbox" id="doc"><label for="doc"><strong>Documentation</strong> — keep logs of encounters to adapt strategy.</label></li>
+          </ul>
+        </section>
+
+        <footer>
+          <div class="muted">Last updated: <strong><!-- dynamic --></strong></div>
+        </footer>
+      </div>
+
+      <aside>
+        <div class="card summary">
+          <h3 style="margin-top:0">Quick Summary</h3>
+          <p class="muted">Preparedness, unity, and adaptability are your best defense. Apply the checklist; organize your community; rehearse drills.</p>
+          <details style="margin-top:8px"><summary><strong>Printable checklist</strong></summary>
+            <p class="muted small">Use the Print button to produce a PDF suitable for printing and distribution.</p>
+          </details>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4 style="margin:0 0 8px 0">Notes &amp; Tips</h4>
+          <ul class="muted small">
+            <li>Adapt countermeasures based on observed capabilities of the threat.</li>
+            <li>Keep comms simple and redundant: low-tech often survives high-tech disruptions.</li>
+            <li>Practice drills monthly and review logs after each exercise.</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4 style="margin:0 0 8px 0">Connection &amp; Diagnostics</h4>
+          <p class="muted small">Basic client diagnostics for on-site devices.</p>
+          <button id="checkWifiBtn">Check Connection</button>
+          <div id="wifiStatus" class="muted small"></div>
+          <hr style="margin:12px 0; border:none; border-top:1px solid rgba(255,255,255,0.04)">
+          <div class="muted small"><strong>Local network hints</strong></div>
+          <div class="muted small" style="margin-top:6px">In-browser JS cannot read Wi‑Fi encryption or SSID. Use native tools or router admin for full details.</div>
+          <div style="margin-top:8px; font-size:0.95rem; color:var(--muted)">
+            <div><strong>Navigator connection:</strong> <span id="connType">—</span></div>
+            <div>Downlink: <span id="connDownlink">—</span></div>
+            <div>RTT: <span id="connRtt">—</span></div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    // print & export
+    document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+    document.getElementById('exportBtn').addEventListener('click', ()=>{
+      const blob = new Blob([document.documentElement.outerHTML], {type: 'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'home-neighborhood-defensive-playbook.html'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+
+    // last updated
+    const footerDate = document.querySelector('footer strong'); footerDate.textContent = new Date().toLocaleDateString();
+
+    // basic connectivity check using Cloudflare trace (CORS-friendly)
+    const wifiBtn = document.getElementById('checkWifiBtn');
+    const wifiStatus = document.getElementById('wifiStatus');
+    wifiBtn.addEventListener('click', async ()=>{
+      wifiStatus.textContent = 'Checking connection...';
+      try{
+        const start = performance.now();
+        const resp = await fetch('https://1.1.1.1/cdn-cgi/trace', {cache:'no-store', mode:'cors'});
+        const latency = Math.round(performance.now()-start);
+        if(resp.ok){
+          const text = await resp.text();
+          wifiStatus.innerHTML = `<span class=\"online\">✅ Online</span><br><span>Latency: ${latency} ms</span><br><small style=\"color:var(--muted)\">${text.split('\n').slice(0,3).join(' | ')}</small>`;
+        } else {
+          wifiStatus.innerHTML = `<span class=\"offline\">❌ Connection issue detected (status ${resp.status})</span>`;
+        }
+      }catch(e){
+        wifiStatus.innerHTML = `<span class=\"offline\">❌ Offline or blocked</span>`;
+      }
+    });
+
+    // Navigator connection info (best-effort, limited)
+    function updateConnectionInfo(){
+      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      if(conn){
+        document.getElementById('connType').textContent = conn.effectiveType || conn.type || 'unknown';
+        document.getElementById('connDownlink').textContent = (conn.downlink !== undefined) ? conn.downlink + ' Mb/s' : '—';
+        document.getElementById('connRtt').textContent = (conn.rtt !== undefined) ? conn.rtt + ' ms' : '—';
+      } else {
+        document.getElementById('connType').textContent = 'API not supported';
+        document.getElementById('connDownlink').textContent = '—';
+        document.getElementById('connRtt').textContent = '—';
+      }
+    }
+    updateConnectionInfo();
+    if(navigator.connection) navigator.connection.addEventListener('change', updateConnectionInfo);
+  </script>
+</body>
+</html>
