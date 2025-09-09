@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Home Wi-Fi Defensive Checklist and Playbook</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9aa4b2; --accent:#60a5fa; --success:#34d399;
+      --maxw:900px;
+      color-scheme: dark;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:24px; background:linear-gradient(180deg,#071021 0%, #071827 100%); color:#e6eef6}
+    .wrap{max-width:var(--maxw); margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    h1{font-size:1.5rem;margin:0}
+    p.lead{color:var(--muted);margin:6px 0 18px}
+    .controls{display:flex;gap:8px}
+    button{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--accent);padding:8px 12px;border-radius:8px;cursor:pointer}
+    main{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.6);}
+    section h2{margin-top:0}
+    ul.checklist{list-style:none;padding:0;margin:8px 0}
+    ul.checklist li{display:flex;gap:12px;align-items:flex-start;padding:10px 6px;border-radius:8px}
+    ul.checklist li label{flex:1}
+    .muted{color:var(--muted);font-size:0.95rem}
+    aside{position:sticky;top:24px}
+    .small{font-size:0.95rem}
+    .summary{background:linear-gradient(90deg, rgba(96,165,250,0.06), rgba(52,211,153,0.03));padding:12px;border-radius:8px;color:var(--muted)}
+    details{background:transparent;border-radius:8px;padding:8px}
+    summary{cursor:pointer;outline:none}
+    pre{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;overflow:auto}
+    footer{margin-top:18px;color:var(--muted);font-size:0.9rem}
+    #wifiStatus{margin-top:8px;font-size:0.95rem}
+    #wifiStatus span{display:inline-block;margin-top:4px}
+    #wifiStatus .online{color:var(--success)}
+    #wifiStatus .offline{color:#f87171}
+    @media (max-width:900px){main{grid-template-columns:1fr; } aside{position:static}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Home Wi‑Fi Defensive Playbook</h1>
+        <p class="lead">Practical, step-by-step checklist to secure your home Wi‑Fi and respond to incidents.</p>
+      </div>
+      <div class="controls">
+        <button id="printBtn">Print</button>
+        <button id="exportBtn">Download HTML</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="card">
+        <section id="router">
+          <h2>1. Router &amp; Firmware Hardening</h2>
+          <ul class="checklist">
+            <li><input type="checkbox" id="fw"><label for="fw"><strong>Update firmware regularly</strong> — check manufacturer site or app and apply updates.</label></li>
+            <li><input type="checkbox" id="remote"><label for="remote"><strong>Disable remote administration</strong> unless you specifically need it.</label></li>
+            <li><input type="checkbox" id="defaultcreds"><label for="defaultcreds"><strong>Change default admin credentials</strong> to a strong unique password.</label></li>
+            <li><input type="checkbox" id="upnp"><label for="upnp"><strong>Disable UPnP and WPS</strong> — convenient but often exploitable.</label></li>
+          </ul>
+        </section>
+
+        <section id="wifi">
+          <h2>2. Wi‑Fi Network Security</h2>
+          <ul class="checklist">
+            <li><input type="checkbox" id="wpa"><label for="wpa"><strong>Use WPA3</strong> (or WPA2 if needed). Never use WEP.</label></li>
+            <li><input type="checkbox" id="ssid"><label for="ssid"><strong>Rename your SSID</strong> — avoid default names that reveal model/brand.</label></li>
+            <li><input type="checkbox" id="wifipass"><label for="wifipass"><strong>Strong Wi‑Fi password</strong> — 16+ characters with mixed character types.</label></li>
+            <li><input type="checkbox" id="guest"><label for="guest"><strong>Enable a guest network</strong> for visitors and IoT devices—keep it isolated from your main network.</label></li>
+          </ul>
+        </section>
+
+        <section id="devices">
+          <h2>3. Device Layer Protection</h2>
+          <ul class="checklist">
+            <li><input type="checkbox" id="updates"><label for="updates"><strong>Keep all devices updated</strong> — OS and apps.</label></li>
+            <li><input type="checkbox" id="av"><label for="av"><strong>Install reputable antivirus/EDR</strong> on computers and phones.</label></li>
+            <li><input type="checkbox" id="remove"><label for="remove"><strong>Remove unknown/unused devices</strong> — review the router's device list regularly.</label></li>
+          </ul>
+        </section>
+
+        <section id="monitoring">
+          <h2>4. Network Monitoring &amp; Logging</h2>
+          <ul class="checklist">
+            <li><input type="checkbox" id="checkdevices"><label for="checkdevices"><strong>Check connected devices weekly</strong> via admin page/app.</label></li>
+            <li><input type="checkbox" id="logging"><label for="logging"><strong>Enable logging</strong> on router and review for suspicious activity.</label></li>
+            <li><input type="checkbox" id="alerts"><label for="alerts"><strong>Set up alerts</strong> (new device connected notifications) if supported.</label></li>
+          </ul>
+        </section>
+
+        <section id="advanced">
+          <h2>5. Advanced Defenses</h2>
+          <ul class="checklist">
+            <li><input type="checkbox" id="firewall"><label for="firewall"><strong>Enable router firewall</strong> or use a dedicated firewall (pfSense, OPNsense).</label></li>
+            <li><input type="checkbox" id="vpn"><label for="vpn"><strong>Use a VPN</strong> on the router or devices for extra privacy.</label></li>
+            <li><input type="checkbox" id="dns"><label for="dns"><strong>Use secure DNS</strong> (Cloudflare/1.1.1.1, Quad9) with malware filtering.</label></li>
+          </ul>
+        </section>
+
+        <section id="physical">
+          <h2>6. Physical Security &amp; Redundancy</h2>
+          <ul class="checklist">
+            <li><input type="checkbox" id="lock"><label for="lock"><strong>Place router in a secure location</strong> to prevent tampering.</label></li>
+            <li><input type="checkbox" id="reboot"><label for="reboot"><strong>Power cycle occasionally</strong> to clear temporary exploits.</label></li>
+            <li><input type="checkbox" id="backup"><label for="backup"><strong>Backup configuration</strong> after hardening so you can restore safely.</label></li>
+          </ul>
+        </section>
+
+        <section id="response">
+          <h2>7. Emergency Response Plan</h2>
+          <div class="muted small">
+            If you suspect your network has been compromised, follow these steps in order:
+          </div>
+          <ol class="muted small" style="margin-top:8px">
+            <li>Disconnect the router from the internet.</li>
+            <li>Factory reset the router and reapply secure settings.</li>
+            <li>Change all Wi‑Fi and router admin passwords.</li>
+            <li>Scan connected devices for malware and isolate infected machines.</li>
+            <li>Review logs for unusual connections or data exfiltration.</li>
+          </ol>
+        </section>
+
+        <footer>
+          <div class="muted">Last updated: <strong><!-- dynamic --></strong></div>
+        </footer>
+      </div>
+
+      <aside>
+        <div class="card summary">
+          <h3 style="margin-top:0">Quick Summary</h3>
+          <p class="muted">Follow the checklist from top to bottom. Start by hardening the router and Wi‑Fi settings, then secure devices and enable monitoring. Keep backups and have an emergency plan.</p>
+          <details style="margin-top:8px"><summary><strong>Printable checklist</strong></summary>
+            <p class="muted small">Use the Print button to create a PDF suitable for printing.</p>
+          </details>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4 style="margin:0 0 8px 0">Notes & Tips</h4>
+          <ul class="muted small">
+            <li>WPA3 is preferred — but verify device compatibility first.</li>
+            <li>IoT devices should go on the guest VLAN or a separate network segment.</li>
+            <li>Keep a secure password manager for router credentials.</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4 style="margin:0 0 8px 0">Wi‑Fi Connection Status</h4>
+          <p class="muted small">Check whether your device is online and measure connectivity.</p>
+          <button id="checkWifiBtn">Check Connection</button>
+          <div id="wifiStatus" class="muted small"></div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    // wire up print and export
+    document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+    document.getElementById('exportBtn').addEventListener('click', ()=>{
+      const blob = new Blob([document.documentElement.outerHTML], {type: 'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'home-wifi-defensive-playbook.html'; document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // set last updated date
+    const footerDate = document.querySelector('footer strong');
+    footerDate.textContent = new Date().toLocaleDateString();
+
+    // check Wi-Fi connection (basic online test)
+    const wifiBtn = document.getElementById('checkWifiBtn');
+    const wifiStatus = document.getElementById('wifiStatus');
+    wifiBtn.addEventListener('click', async ()=>{
+      wifiStatus.textContent = 'Checking connection...';
+      try {
+        const start = performance.now();
+        const response = await fetch('https://1.1.1.1/cdn-cgi/trace', {cache:'no-store'});
+        //const response = await fetch('https://www.gstatic.com/generate_204', {cache:'no-store'});
+        const latency = Math.round(performance.now() - start);
+        if(response.ok){
+          wifiStatus.innerHTML = `<span class="online">✅ Online</span><br><span>Latency: ${latency} ms</span>`;
+        } else {
+          wifiStatus.innerHTML = `<span class="offline">❌ Connection issue detected</span>`;
+        }
+      } catch(e){
+        wifiStatus.innerHTML = `<span class="offline">❌ Offline or blocked: ${e.message}</span>`;
+      }
+    });
+  </script>
+</body>
+</html>
