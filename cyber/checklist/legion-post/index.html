@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>American Legion Post Security Playbook</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      display: flex;
+    }
+    main {
+      flex: 3;
+      padding: 20px;
+      background: #fdfdfd;
+    }
+    aside {
+      flex: 1;
+      padding: 20px;
+      background: #f4f4f4;
+      border-left: 2px solid #ddd;
+    }
+    h1, h2, h3 {
+      color: #003366;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 6px 0;
+    }
+    label {
+      cursor: pointer;
+    }
+    .section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    button {
+      margin: 5px 0;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      background: #003366;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0055aa;
+    }
+    .connection-status {
+      margin-top: 10px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>🛡️ Cyber & Physical Security Playbook</h1>
+    <p>American Legion Post Checklist for protecting Wi-Fi, devices, and facilities.</p>
+
+    <div class="section">
+      <h2>📡 Cybersecurity Checklist</h2>
+      <ul>
+        <li><label><input type="checkbox"> 🔒 Secure Wi-Fi (WPA3/WPA2, strong router password, guest network)</label></li>
+        <li><label><input type="checkbox"> 🔑 Use strong authentication and change Wi-Fi/admin passwords regularly</label></li>
+        <li><label><input type="checkbox"> 📲 Keep all Legion devices updated and protected with antivirus/firewalls</label></li>
+        <li><label><input type="checkbox"> 📬 Train staff to recognize phishing and social engineering</label></li>
+        <li><label><input type="checkbox"> 🖥️ Keep website & social media patched, with HTTPS enabled</label></li>
+        <li><label><input type="checkbox"> 🛡️ Maintain cyber emergency contacts and response procedures</label></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🏛️ Physical Security Checklist</h2>
+      <ul>
+        <li><label><input type="checkbox"> 🚪 Control building access (locks, keycards, staff-only zones)</label></li>
+        <li><label><input type="checkbox"> 🎥 Maintain and monitor security cameras</label></li>
+        <li><label><input type="checkbox"> 🔦 Ensure parking lots and entrances are well lit</label></li>
+        <li><label><input type="checkbox"> 🧯 Keep fire extinguishers and first-aid kits ready</label></li>
+        <li><label><input type="checkbox"> 👮 Train staff/volunteers in safety awareness and de-escalation</label></li>
+        <li><label><input type="checkbox"> 📝 Keep visitor sign-in logs and closing buddy system</label></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>📝 Incident Response Playbook</h2>
+      <h3>Cyber Incident</h3>
+      <ul>
+        <li><label><input type="checkbox"> Disconnect compromised device from Wi-Fi</label></li>
+        <li><label><input type="checkbox"> Notify Post Commander or IT contact</label></li>
+        <li><label><input type="checkbox"> Preserve logs & evidence</label></li>
+        <li><label><input type="checkbox"> Reset compromised accounts</label></li>
+        <li><label><input type="checkbox"> Report to ISP or law enforcement if needed</label></li>
+      </ul>
+
+      <h3>Physical Incident</h3>
+      <ul>
+        <li><label><input type="checkbox"> Ensure personal safety first</label></li>
+        <li><label><input type="checkbox"> Call 911 if necessary</label></li>
+        <li><label><input type="checkbox"> Evacuate members if required</label></li>
+        <li><label><input type="checkbox"> Secure building after incident</label></li>
+        <li><label><input type="checkbox"> Document what happened (photos, reports)</label></li>
+      </ul>
+    </div>
+
+    <button onclick="window.print()">🖨️ Print / Export PDF</button>
+  </main>
+
+  <aside>
+    <h2>📡 Connection Tools</h2>
+    <button onclick="checkConnection()">Check Connection</button>
+    <div id="connectionStatus" class="connection-status">Status: Not checked</div>
+    <div id="extraInfo" class="connection-status"></div>
+  </aside>
+
+  <script>
+    async function checkConnection() {
+      const statusEl = document.getElementById('connectionStatus');
+      try {
+        const start = Date.now();
+        await fetch("https://httpbin.org/get", {cache: "no-store"});
+        const latency = Date.now() - start;
+        statusEl.textContent = "✅ Online (Latency: " + latency + " ms)";
+      } catch {
+        statusEl.textContent = "❌ Offline or blocked";
+      }
+
+      if ('connection' in navigator) {
+        const c = navigator.connection;
+        document.getElementById('extraInfo').innerHTML = `
+          <b>Connection Info:</b><br>
+          Type: ${c.effectiveType}<br>
+          Downlink: ${c.downlink} Mbps<br>
+          RTT: ${c.rtt} ms<br>
+          Metered: ${c.metered}
+        `;
+      } else {
+        document.getElementById('extraInfo').innerHTML = "<b>No extra connection info available.</b>";
+      }
+    }
+  </script>
+</body>
+</html>

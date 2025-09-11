@@ -38,6 +38,8 @@ function displayNextUSHoliday() {
 
     // Function to get the last occurrence of a weekday in a month
     function getLastWeekdayOfMonth(year, month, weekday) {
+        if (weekday < 0 || weekday > 6) return null;
+        if (month < 0 || month > 12) return null;
         const lastDay = new Date(year, month, 0).getDate();
         let day = lastDay;
         while (day > 0) {
@@ -88,12 +90,12 @@ function displayNextUSHoliday() {
     });
 
     // Update the text element
-    const textElement = document.getElementById('holidayText');
-    if (minDaysUntil === 0) {
-        textElement.textContent = `Today is ${nextHoliday.name}!`;
-    } else {
-        textElement.textContent = `${minDaysUntil} day${minDaysUntil === 1 ? '' : 's'} until ${nextHoliday.name}`;
-    }
+    // const textElement = document.getElementById('holidayText');
+    // if (minDaysUntil === 0) {
+    //     textElement.textContent = `Today is ${nextHoliday.name}!`;
+    // } else {
+    //     textElement.textContent = `${minDaysUntil} day${minDaysUntil === 1 ? '' : 's'} until ${nextHoliday.name}`;
+    // }
     
     // cli display
     if (minDaysUntil === 0) {
@@ -104,3 +106,18 @@ function displayNextUSHoliday() {
 }
 
 displayNextUSHoliday();
+
+function getLastWeekdayOfMonth(year, month, weekday) {
+    if (weekday < 0 || weekday > 6) return null;
+    const lastDay = new Date(year, month, 0).getDate();
+    let day = lastDay;
+    while (day > 0) {
+        const date = new Date(year, month - 1, day);
+        console.log("date: " + date);
+        if (date.getDay() === weekday) return date;
+        day--;
+    }
+    return null;
+}
+
+console.log(getLastWeekdayOfMonth(2025, 1, 6));
