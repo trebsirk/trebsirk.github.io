@@ -162,10 +162,11 @@
 
             if (lookupData.has(key)) {
                 const result = lookupData.get(key);
+                console.log(typeof result, result);
                 if (result > 0.1) {
-                    result = Math.min(result, 0.03);
+                    console.log(result, 0.05, result > 0.05, Math.min(result, 0.05));
                     br = brValue;
-                    nc = Math.floor(br * result / 10.0);
+                    nc = Math.floor(br * Math.min(result / 10.0, 0.05));
                     console.log(br, nc);
                     document.getElementById("result").textContent = nc;
                 } else {
