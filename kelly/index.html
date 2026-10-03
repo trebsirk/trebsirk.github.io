@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lookup</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 60px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f0f0;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Lookup</h1>
+
+    <div class="field">
+        <label for="cp">cp</label>
+        <select id="cp"></select>
+    </div>
+
+    <div class="field">
+        <label for="t">t</label>
+        <select id="t"></select>
+    </div>
+
+    <div class="field">
+        <label for="br">br</label>
+        <select id="br"></select>
+    </div>
+
+    <button onclick="lookupValue()">Look Up</button>
+
+    <div id="result">Select values and click Look Up</div>
+
+    <script>
+        // The CSV file should be in the same directory as this HTML file.
+        const csvFile = "data.csv";
+
+        // Store the CSV data here.
+        const lookupData = new Map();
+
+
+        // Populate the first dropdown: 1-99
+        const cpSelect = document.getElementById("cp");
+
+        for (let i = 50; i <= 99; i++) {
+            const option = document.createElement("option");
+            option.value = i;
+            option.textContent = i;
+            cpSelect.appendChild(option);
+        }
+
+        // Populate the second dropdown: 1-200
+        const tSelect = document.getElementById("t");
+
+        for (let i = 60; i <= 200; i++) {
+            const option = document.createElement("option");
+            option.value = i;
+            option.textContent = i;
+            tSelect.appendChild(option);
+        }
+
+        // Populate the third dropdown: 1-100
+        const brSelect = document.getElementById("br");
+
+        for (let i = 200; i <= 400; i++) {
+            const option = document.createElement("option");
+            option.value = i;
+            option.textContent = i;
+            brSelect.appendChild(option);
+        }
+
+        // Load and parse the CSV
+        fetch(csvFile)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Could not load CSV file.");
+                }
+
+                return response.text();
+            })
+            .then(csvText => {
+                const rows = csvText.trim().split(/\r?\n/);
+
+                rows.forEach(row => {
+                    const columns = row.split(",");
+
+                    if (columns.length < 3) {
+                        return;
+                    }
+
+                    const firstValue = columns[0].trim();
+                    const secondValue = columns[1].trim();
+                    const result = columns[2].trim();
+
+                    // Create a unique key from the first two columns.
+                    const key = `${firstValue},${secondValue}`;
+
+                    lookupData.set(key, result);
+                });
+
+                console.log(`Loaded ${lookupData.size} CSV rows.`);
+            })
+            .catch(error => {
+                console.error(error);
+
+                document.getElementById("result").textContent =
+                    "Error loading CSV file.";
+            });
+
+
+        // Look up the selected values
+        function lookupValue() {
+            const tValue = tSelect.value;
+            const cpValue = cpSelect.value;
+            const brValue = brSelect.value;
+
+            const key = `${tValue},${cpValue}`;
+
+            if (lookupData.has(key)) {
+                const result = lookupData.get(key);
+                if (result > 0.1) {
+                    br = brValue;
+                    nc = Math.floor(br * result / 10.0);
+                    console.log(br, nc);
+                    document.getElementById("result").textContent = nc;
+                } else {
+                    document.getElementById("result").textContent =
+                        "Value is less than or equal to 0.1";
+                }
+
+            }
+                
+            else {
+                document.getElementById("result").textContent =
+                    "No value found";
+            }
+        }
+    </script>
+
+</body>
+</html>
