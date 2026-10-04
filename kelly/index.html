@@ -106,7 +106,7 @@
         // Populate the third dropdown: 1-100
         const brSelect = document.getElementById("br");
 
-        for (let i = 200; i <= 400; i++) {
+        for (let i = 300; i <= 400; i++) {
             const option = document.createElement("option");
             option.value = i;
             option.textContent = i;
@@ -163,19 +163,19 @@
             if (lookupData.has(key)) {
                 const result = lookupData.get(key);
                 console.log(typeof result, result);
-                if (result > 0.1) {
-                    console.log(result, 0.05, result > 0.05, Math.min(result, 0.05));
+                if (result >= 0.02) {
+                    // console.log(result, 0.05, result > 0.03, Math.min(result, 0.03));
                     br = brValue;
-                    nc = Math.floor(br * Math.min(result / 10.0, 0.05));
-                    console.log(br, nc);
+                    const pct = Math.min(result / 4.0, 0.05);
+                    const spend = br * pct;
+                    nc = Math.floor(spend);
+                    console.log(br, pct, spend, nc);
                     document.getElementById("result").textContent = nc;
                 } else {
                     document.getElementById("result").textContent =
-                        "Value is less than or equal to 0.1";
+                        "k < 0.02";
                 }
-
             }
-                
             else {
                 document.getElementById("result").textContent =
                     "No value found";
