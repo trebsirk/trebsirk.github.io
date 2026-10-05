@@ -170,10 +170,10 @@
                     const spend = br * pct;
                     nc = Math.floor(spend);
                     console.log(br, pct, spend, nc);
-                    document.getElementById("result").textContent = nc;
+                    document.getElementById("result").textContent = nc + " (k = " + result+")";
                 } else {
                     document.getElementById("result").textContent =
-                        "k < 0.02";
+                        "k < 0.02" + " (k = " + result+")";
                 }
             }
             else {
