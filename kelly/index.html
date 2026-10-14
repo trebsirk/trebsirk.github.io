@@ -106,7 +106,7 @@
         // Populate the third dropdown: 1-100
         const brSelect = document.getElementById("br");
 
-        for (let i = 300; i <= 400; i++) {
+        for (let i = 200; i <= 400; i++) {
             const option = document.createElement("option");
             option.value = i;
             option.textContent = i;
@@ -163,7 +163,7 @@
             if (lookupData.has(key)) {
                 const result = lookupData.get(key);
                 console.log(typeof result, result);
-                if (result >= 0.02) {
+                if (result >= 0.0) {
                     // console.log(result, 0.05, result > 0.03, Math.min(result, 0.03));
                     br = brValue;
                     const pct = Math.min(result / 4.0, 0.05);
