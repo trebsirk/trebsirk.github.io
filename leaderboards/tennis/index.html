@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATP & WTA Leaderboards</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+      --atp-accent: #38bdf8;
+      --wta-accent: #c084fc;
+      --surprise-accent: #34d399;
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 2rem 1.5rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    @media (max-width: 768px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      overflow-x: auto;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      color: #0f172a;
+    }
+    .badge.atp { background: var(--atp-accent); }
+    .badge.wta { background: var(--wta-accent); }
+    .badge.surprise { background: var(--surprise-accent); }
+    h2 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th, td {
+      padding: 0.75rem 0.85rem;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    th {
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+    /* Rank Column & Metallic Podium + Muted Slate Palette */
+    .rank {
+      width: 72px;
+    }
+    .rank-pill {
+      display: inline-block;
+      min-width: 2.25rem;
+      text-align: center;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      font-variant-numeric: tabular-nums;
+      color: #94a3b8;
+    }
+    tbody tr:nth-child(1) .rank-pill {
+      color: #fde047;
+      background: rgba(250, 204, 21, 0.14);
+      border: 1px solid rgba(250, 204, 21, 0.3);
+    }
+    tbody tr:nth-child(2) .rank-pill {
+      color: #e2e8f0;
+      background: rgba(226, 232, 240, 0.14);
+      border: 1px solid rgba(226, 232, 240, 0.28);
+    }
+    tbody tr:nth-child(3) .rank-pill {
+      color: #fdba74;
+      background: rgba(251, 146, 60, 0.14);
+      border: 1px solid rgba(251, 146, 60, 0.28);
+    }
+    .player-name {
+      font-weight: 500;
+    }
+    .status {
+      text-align: center;
+      color: var(--muted);
+      padding: 2rem;
+    }
+    .error { color: #f87171; }
+  </style>
+</head>
+<body>
+
+<div class="grid">
+  <!-- Row 1: Main Leaderboards -->
+  <div class="card">
+    <div class="card-header">
+      <span class="badge atp">ATP</span>
+      <h2>ATP Leaderboard</h2>
+    </div>
+    <table id="atpTable">
+      <thead></thead>
+      <tbody><tr><td class="status">Loading atp.csv...</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="badge wta">WTA</span>
+      <h2>WTA Leaderboard</h2>
+    </div>
+    <table id="wtaTable">
+      <thead></thead>
+      <tbody><tr><td class="status">Loading wta.csv...</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- Row 2: Surprise Leaderboards -->
+  <div class="card">
+    <div class="card-header">
+      <span class="badge atp">ATP</span>
+      <span class="badge surprise">SURPRISE</span>
+      <h2>ATP Surprise Leaderboard</h2>
+    </div>
+    <table id="atpSurpriseTable">
+      <thead></thead>
+      <tbody><tr><td class="status">Loading atp_surprise.csv...</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="badge wta">WTA</span>
+      <span class="badge surprise">SURPRISE</span>
+      <h2>WTA Surprise Leaderboard</h2>
+    </div>
+    <table id="wtaSurpriseTable">
+      <thead></thead>
+      <tbody><tr><td class="status">Loading wta_surprise.csv...</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // Update S3_REGION if your bucket is not in us-east-1 (e.g., 'us-west-2', 'eu-west-1')
+  const S3_BUCKET = 'leaderboard-tennis';
+  const S3_REGION = 'us-east-1';
+  const S3_BASE_URL = `https://${S3_BUCKET}.s3.${S3_REGION}.amazonaws.com`;
+
+  const LEADERBOARDS = [
+    { file: 'atp.csv', tableId: 'atpTable' },
+    { file: 'wta.csv', tableId: 'wtaTable' },
+    { file: 'atp_surprise.csv', tableId: 'atpSurpriseTable' },
+    { file: 'wta_surprise.csv', tableId: 'wtaSurpriseTable' }
+  ];
+
+  function parseCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    if (lines.length < 2) return { headers: [], rows: [] };
+
+    const headers = lines[0].split(',').map(h => h.trim());
+    const rows = lines.slice(1).map(line => {
+      const values = line.split(',').map(v => v.trim());
+      const obj = {};
+      headers.forEach((header, i) => {
+        obj[header] = values[i] ?? '';
+      });
+      return obj;
+    });
+
+    return { headers, rows };
+  }
+
+  function escapeHTML(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  async function loadLeaderboard(fileName, tableId) {
+    const thead = document.querySelector(`#${tableId} thead`);
+    const tbody = document.querySelector(`#${tableId} tbody`);
+    const url = `${S3_BASE_URL}/${fileName}?t=${Date.now()}`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const text = await response.text();
+      const { headers, rows } = parseCSV(text);
+
+      if (!headers.length) {
+        tbody.innerHTML = `<tr><td class="status">No data found in ${escapeHTML(fileName)}</td></tr>`;
+        return;
+      }
+
+      const rankKey = headers.find(h => h.toLowerCase() === 'rank');
+      const nameKey = headers.find(h => h.toLowerCase() === 'name') || headers[0];
+      const otherKeys = headers.filter(h => h !== rankKey && h !== nameKey);
+
+      if (rankKey) {
+        rows.sort((a, b) => (parseInt(a[rankKey], 10) || Infinity) - (parseInt(b[rankKey], 10) || Infinity));
+      }
+
+      thead.innerHTML = `
+        <tr>
+          <th class="rank">Rank</th>
+          <th>${escapeHTML(nameKey)}</th>
+          ${otherKeys.map(h => `<th>${escapeHTML(h)}</th>`).join('')}
+        </tr>
+      `;
+
+      tbody.innerHTML = rows.map((row, index) => {
+        const rankDisplay = rankKey ? row[rankKey] : index + 1;
+        return `
+          <tr>
+            <td class="rank"><span class="rank-pill">#${escapeHTML(rankDisplay)}</span></td>
+            <td class="player-name">${escapeHTML(row[nameKey])}</td>
+            ${otherKeys.map(h => `<td>${escapeHTML(row[h])}</td>`).join('')}
+          </tr>
+        `;
+      }).join('');
+    } catch (err) {
+      tbody.innerHTML = `
+        <tr>
+          <td class="status error">
+            Failed to load <strong>${escapeHTML(fileName)}</strong> from S3 (${escapeHTML(err.message)}).<br>
+            <small>Verify the bucket region, public read access, and CORS configuration.</small>
+          </td>
+        </tr>
+      `;
+    }
+  }
+
+  LEADERBOARDS.forEach(({ file, tableId }) => loadLeaderboard(file, tableId));
+</script>
+
+</body>
+</html>
